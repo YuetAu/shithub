@@ -1,5 +1,5 @@
 "use client";
-import { Box, Flex, Grid, GridItem, Tab, Text, keyframes } from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, Tab, Text, keyframes, useToast } from "@chakra-ui/react";
 import { IconAwardFilled, IconPooFilled } from "@tabler/icons-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ShitBackground } from "./props/ShitBackground";
@@ -27,6 +27,8 @@ export default function Home() {
   }, [])
 
   const [tab, setTab] = useState(0);
+
+  const toast = useToast();
 
   return (
     <>
