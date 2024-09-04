@@ -59,8 +59,9 @@ export const ShitBackground = (props: any) => {
             ))}
 
             {/* Flying poops */}
-            {flyingPoops.map(poop => (
+            {flyingPoops.map((poop, i) => (
                 <Box
+                    key={i}
                     position="absolute"
                     bottom={`${poop.bottom}px`} // Random vertical position
                     left="-50px"
