@@ -5,7 +5,7 @@ import { float, flyAcross } from "../styles/keyframes";
 
 export const ShitBackground = (props: any) => {
     const randomArray = useMemo(() => {
-        return Array.from({ length: 20 }, () => [Math.random(), Math.random(), Math.random()]);
+        return Array.from({ length: 10 }, () => [Math.random(), Math.random(), Math.random()]);
     }, []);
 
     return (

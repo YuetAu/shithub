@@ -65,7 +65,7 @@ export const User = (props: any) => {
                 <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"} >
                     <Box
                         shadow={"lg"} rounded={"lg"} p={"0.5rem"}
-                        w={"sm"}
+                        w={"20rem"}
                         bgColor={"white"}
                         userSelect={"none"}
                         display={"flex"}
