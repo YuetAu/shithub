@@ -48,6 +48,8 @@ export const User = (props: any) => {
         const registerData = await registerResponse.json();
         if (registerData.success) {
             alert("Registered Successfully");
+        } else {
+            alert("Failed to register");
         }
     };
 
@@ -67,7 +69,7 @@ export const User = (props: any) => {
                         zIndex="99"
                         gap={"0.5rem"}
                     >
-                        <Input size='lg' _autofill={"webauthn"} placeholder={"Pick a username"} onChange={(e) => { checkUsername(e.target.value) }} ref={userNameInput} />
+                        <Input size='lg' autoComplete={"username webauthn"} placeholder={"Pick a username"} onChange={(e) => { checkUsername(e.target.value) }} ref={userNameInput} />
                         <Box
                             shadow={"lg"} rounded={"lg"} p={"0.5rem"}
                             bgColor={"black"}
