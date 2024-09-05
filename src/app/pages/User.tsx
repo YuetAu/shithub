@@ -10,12 +10,18 @@ export const User = (props: any) => {
     const userNameInput = useRef<HTMLInputElement>(null);
 
     const checkUsername = debounce(async (username: string) => {
-        const response = await fetch(`https://shithub-backend.yuetau.workers.dev/user/check-username/${username}`);
-        const data = await response.json();
-        return data.available;
+        if (username) {
+            const response = await fetch(`https://shithub-backend.yuetau.workers.dev/user/check-username/${username}`);
+            const data = await response.json();
+            return data.available;
+        }
     }, 300);
 
     const register = async () => {
+        if (!userNameInput.current?.value) {
+            alert("Please enter a username");
+            return;
+        }
         if (!await platformAuthenticatorIsAvailable()) {
             alert("Platform Authenticator is not available");
             return;
