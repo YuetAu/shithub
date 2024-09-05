@@ -5,7 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ShitBackground } from "./props/ShitBackground";
 import { TabSelector } from "./props/TabSelector";
 import React from "react";
-import { ShitCounter } from "./props/ShitCounter";
+import { ShitCounter } from "./pages/ShitCounter";
+import { User } from "./pages/User";
 
 export default function Home() {
   // [Sys] ContinerHeight Helper Functions and States
@@ -28,8 +29,6 @@ export default function Home() {
 
   const [tab, setTab] = useState(0);
 
-  const toast = useToast();
-
   return (
     <>
       <Box
@@ -49,6 +48,7 @@ export default function Home() {
           zIndex="99"
         >
           {tab === 0 && <ShitCounter />}
+          {tab === 1 && <User />}
           <GridItem>
             <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
               <TabSelector tab={tab} setTab={setTab} />

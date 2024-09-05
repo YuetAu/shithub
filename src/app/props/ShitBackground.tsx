@@ -50,6 +50,7 @@ export const ShitBackground = (props: any) => {
                     fontSize="40px"
                     zIndex="2"
                     opacity="0.8"
+                    userSelect="none"
                 >
                     💩
                 </Box>

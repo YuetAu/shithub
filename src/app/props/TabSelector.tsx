@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react"
-import { IconAwardFilled, IconPooFilled } from "@tabler/icons-react"
+import { IconAwardFilled, IconPooFilled, IconUserFilled } from "@tabler/icons-react"
 
 const TABS = [
     {
         icon: IconPooFilled,
     },
     {
-        icon: IconAwardFilled,
+        icon: IconUserFilled,
     }
 ]
 
