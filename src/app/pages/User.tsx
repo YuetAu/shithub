@@ -26,7 +26,7 @@ export const User = (props: any) => {
             alert("Platform Authenticator is not available");
             return;
         }
-        const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/challenge`, {
+        const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/reg-challenge`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
