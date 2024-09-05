@@ -1,5 +1,6 @@
 import { Box, Flex, GridItem, Input, Text } from "@chakra-ui/react";
-import { startAuthentication } from "@simplewebauthn/browser";
+import { startRegistration } from "@simplewebauthn/browser";
+import { platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from "@tabler/icons-react";
 import { debounce } from "lodash";
 import { useRef } from "react";
@@ -15,6 +16,10 @@ export const User = (props: any) => {
     }, 300);
 
     const register = async () => {
+        if (!await platformAuthenticatorIsAvailable()) {
+            alert("Platform Authenticator is not available");
+            return;
+        }
         const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/challenge`, {
             method: "POST",
             headers: {
@@ -29,7 +34,7 @@ export const User = (props: any) => {
             alert("Failed to get challenge");
             return;
         }
-        const passkeyres = await startAuthentication(data.options);
+        const passkeyres = await startRegistration(data.options);
         const registerResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/register`, {
             method: "POST",
             headers: {
