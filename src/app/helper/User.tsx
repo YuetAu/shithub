@@ -89,6 +89,7 @@ export const GetLoginChallenge = async (userID: string) => {
         console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
         return false;
     }
+    console.log("Challenge data: ", challengeData);
     return challengeData.options;
 };
 

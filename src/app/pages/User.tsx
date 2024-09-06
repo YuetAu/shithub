@@ -69,14 +69,18 @@ export const User = (props: any) => {
 
             GetLoginChallenge(userID)
                 .then((res: any) => {
-                    setTimeout(() => startAuthentication(res.options)
-                        .then(async authResp => {
-                            await UserLogin(res.uuid, authResp);
-                        }).catch(err => {
-                            console.log("Failed to start authentication INIT");
-                            console.log(err);
-                            setErrorText("Failed to start authentication INIT");
-                        }), 200);
+                    console.log("Challenge response");
+                    setTimeout(() => {
+                        console.log("Start authentication");
+                        startAuthentication(res.options)
+                            .then(async authResp => {
+                                await UserLogin(res.uuid, authResp);
+                            }).catch(err => {
+                                console.log("Failed to start authentication INIT");
+                                console.log(err);
+                                setErrorText("Failed to start authentication INIT");
+                            })
+                    }, 200);
                 })
                 .catch(err => {
                     console.log("Failed to start authentication");
