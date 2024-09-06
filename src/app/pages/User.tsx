@@ -1,63 +1,87 @@
-import { Box, Flex, GridItem, Input, Text } from "@chakra-ui/react";
-import { startRegistration } from "@simplewebauthn/browser";
+import { Box, Flex, GridItem, Input, Spinner, Text } from "@chakra-ui/react";
+import { browserSupportsWebAuthnAutofill, startAuthentication, startRegistration } from "@simplewebauthn/browser";
 import { platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from "@tabler/icons-react";
 import { debounce } from "lodash";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { GetLoginChallenge, UserLogin, UserRegister } from "../helper/User";
 
 export const User = (props: any) => {
 
     const userNameInput = useRef<HTMLInputElement>(null);
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [errorText, setErrorText] = useState("");
+    const [allowRegister, setAllowRegister] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const checkUsername = debounce(async (username: string) => {
         if (username) {
             const response = await fetch(`https://shithub-backend.yuetau.workers.dev/user/check-username/${username}`);
-            const data = await response.json();
-            return data.available;
+            if (!response.ok) {
+                console.log("Failed to check username");
+                return;
+            }
+            let data;
+            try {
+                data = await response.json();
+            } catch (e) {
+                console.log("Failed to parse check username response");
+                return;
+            }
+            if (data && data.available) {
+                setIsInvalid(false);
+                setErrorText("");
+                setAllowRegister(true);
+            } else {
+                setIsInvalid(true);
+                setErrorText(`Username ${username} is already taken`);
+                setAllowRegister(false);
+            }
         }
     }, 300);
 
-    const register = async () => {
-        if (!userNameInput.current?.value) {
-            alert("Please enter a username");
+    const register = async (username: string) => {
+        if (!allowRegister) {
             return;
         }
-        if (!await platformAuthenticatorIsAvailable()) {
-            alert("Platform Authenticator is not available");
+        if (isRegistering) {
             return;
         }
-        const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/reg-challenge`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: userNameInput.current?.value!,
-            }),
-        });
-        const data = await challengeResponse.json();
-        if (!data.success) {
-            alert("Failed to get challenge");
-            return;
-        }
-        const passkeyres = await startRegistration(data.options);
-        const registerResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/register`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                uuid: data.uuid,
-                passkeyResponse: passkeyres,
-            }),
-        });
-        const registerData = await registerResponse.json();
-        if (registerData.success) {
-            alert("Registered Successfully");
+        setIsRegistering(true);
+        const res = await UserRegister(username);
+        if (res) {
+            alert("Registration success");
         } else {
-            alert("Failed to register");
+            setErrorText("Hmm... Something went wrong. Please try again later.");
         }
-    };
+        setIsRegistering(false);
+    }
+
+    useEffect(() => {
+        if (!platformAuthenticatorIsAvailable()) {
+            console.log("Platform Authenticator is not available");
+            return;
+        }
+        const userID = localStorage.getItem("userID");
+        if (userID) {
+            console.log("User already registered");
+            console.log("Try to login with userID: " + userID);
+
+            GetLoginChallenge(userID)
+                .then((res) => {
+                    startAuthentication(res.options, true)
+                        .then(async authResp => {
+                            await UserLogin(userID, authResp);
+                        })
+                        .catch(err => {
+                            console.log("Failed to start authentication");
+                            console.log(err);
+                            setErrorText("Failed to start authentication");
+                        });
+                });
+
+        }
+    }, []);
 
     return (
         <>
@@ -75,19 +99,29 @@ export const User = (props: any) => {
                         zIndex="99"
                         gap={"0.5rem"}
                     >
-                        <Input size='lg' autoComplete={"username webauthn"} placeholder={"Pick a username"} onChange={(e) => { checkUsername(e.target.value) }} ref={userNameInput} />
+                        <Input
+                            size='lg'
+                            autoComplete={"username webauthn"}
+                            placeholder={"Pick a username"}
+                            onChange={(e) => { checkUsername(e.target.value) }}
+                            disabled={isRegistering}
+                            ref={userNameInput}
+                            isInvalid={false}
+                        />
+                        {errorText && <Text textColor={"red"} fontSize={"12"}>{errorText}</Text>}
                         <Box
                             shadow={"lg"} rounded={"lg"} p={"0.5rem"}
-                            bgColor={"black"}
+                            bgColor={isRegistering ? "gray.600" : "black"}
                             userSelect={"none"}
                             cursor={"pointer"}
                             display={"flex"}
                             flexDirection={"row"}
                             alignItems={"center"}
                             textColor={"white"}
-                            onClick={register}
+                            transition={"all 0.2s ease"}
+                            onClick={(e) => { isRegistering ? e.preventDefault() : e.preventDefault(); register(userNameInput.current?.value || ""); }}
                         >
-                            <IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>Register with Passkey</Text>
+                            {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>Register with Passkey</Text></>)}
                         </Box>
                     </Box>
                 </Flex>
