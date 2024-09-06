@@ -85,7 +85,7 @@ export const User = (props: any) => {
             GetLoginChallenge(userID)
                 .then((res: any) => {
                     console.log("Start authentication");
-                    startAuthentication(res.options, true)
+                    startAuthentication(res.options)
                         .then(async authResp => {
                             console.log("Authentication success");
                             console.log(authResp);
@@ -117,8 +117,11 @@ export const User = (props: any) => {
                             alignItems={"center"}
                             textColor={"black"}
                             transition={"all 0.2s ease"}
+                            flex={"1"}
+                            flexDir={"row"}
+                            gap={"0.5rem"}
                         >
-                            <Spinner size='md' /> Signing in...
+                            <Spinner size='md' /> <Text>Signing in...</Text>
                         </Box>
                     ) : (<Box
                         shadow={"lg"} rounded={"lg"} p={"0.5rem"}
