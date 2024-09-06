@@ -97,7 +97,7 @@ export const User = (props: any) => {
         <>
             <GridItem rowSpan={5}>
                 <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"} >
-                    <Box
+                    {isLoggingIn ? (<Box
                         shadow={"lg"} rounded={"lg"} p={"0.5rem"}
                         w={"20rem"}
                         bgColor={"white"}
@@ -133,7 +133,21 @@ export const User = (props: any) => {
                         >
                             {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
-                    </Box>
+                    </Box>) : (
+                        <Box
+                            shadow={"lg"} rounded={"lg"} p={"0.5rem"}
+                            bgColor={"white"}
+                            userSelect={"none"}
+                            cursor={"pointer"}
+                            display={"flex"}
+                            flexDirection={"row"}
+                            alignItems={"center"}
+                            textColor={"black"}
+                            transition={"all 0.2s ease"}
+                        >
+                            <Spinner size='md' /> Signing in...
+                        </Box>
+                    )}
                 </Flex>
             </GridItem>
         </>
