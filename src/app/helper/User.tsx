@@ -45,6 +45,7 @@ export const UserRegister = async (username: string) => {
             passkeyResponse: passkeyRes,
         }),
     });
+    console.log("Passkey response: ", passkeyRes);
     if (!registerResponse.ok) {
         console.log("Failed to register ERR: FETCH-REGISTER");
         return false;
@@ -85,12 +86,12 @@ export const GetLoginChallenge = async (userID: string) => {
         console.log("Failed to get login challenge ERR: PARSE-CHALLENGE");
         return false;
     }
-    if (!challengeData || !challengeData.success) {
+    if (!challengeData || !challengeData.success || !challengeData.options || !challengeData.uuid) {
         console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
         return false;
     }
     console.log("Challenge data: ", challengeData);
-    return challengeData.options;
+    return challengeData;
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {

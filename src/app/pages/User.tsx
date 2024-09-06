@@ -11,8 +11,9 @@ export const User = (props: any) => {
     const userNameInput = useRef<HTMLInputElement>(null);
     const [isInvalid, setIsInvalid] = useState(false);
     const [errorText, setErrorText] = useState("");
-    const [allowRegister, setAllowRegister] = useState(false);
+    const [allowRegister, setAllowRegister] = useState(true);
     const [isRegistering, setIsRegistering] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
     const checkUsername = debounce(async (username: string) => {
         if (username) {
@@ -47,6 +48,9 @@ export const User = (props: any) => {
         if (isRegistering) {
             return;
         }
+        if (isLoggingIn) {
+            return;
+        }
         setIsRegistering(true);
         const res = await UserRegister(username);
         if (res) {
@@ -57,7 +61,13 @@ export const User = (props: any) => {
         setIsRegistering(false);
     }
 
+    const isFirstRendering = useRef(true);
+
     useEffect(() => {
+        if (isFirstRendering.current) {
+            isFirstRendering.current = false;
+            return;
+        }
         if (!platformAuthenticatorIsAvailable()) {
             console.log("Platform Authenticator is not available");
             return;
@@ -66,26 +76,24 @@ export const User = (props: any) => {
         if (userID) {
             console.log("User already registered");
             console.log("Try to login with userID: " + userID);
+            setIsLoggingIn(true);
 
             GetLoginChallenge(userID)
                 .then((res: any) => {
-                    console.log("Challenge response");
-                    setTimeout(() => {
-                        console.log("Start authentication");
-                        startAuthentication(res.options)
-                            .then(async authResp => {
-                                await UserLogin(res.uuid, authResp);
-                            }).catch(err => {
-                                console.log("Failed to start authentication INIT");
-                                console.log(err);
-                                setErrorText("Failed to start authentication INIT");
-                            })
-                    }, 200);
+                    console.log("Start authentication");
+                    startAuthentication(res.options)
+                        .then(async authResp => {
+                            console.log("Authentication success");
+                            console.log(authResp);
+                            await UserLogin(res.uuid, authResp);
+                            setIsLoggingIn(false);
+                        })
                 })
                 .catch(err => {
                     console.log("Failed to start authentication");
                     console.log(err);
                     setErrorText("Failed to start authentication");
+                    setIsLoggingIn(false);
                 });
 
         }
@@ -129,7 +137,7 @@ export const User = (props: any) => {
                             transition={"all 0.2s ease"}
                             onClick={(e) => { isRegistering ? e.preventDefault() : e.preventDefault(); register(userNameInput.current?.value || ""); }}
                         >
-                            {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>Register with Passkey</Text></>)}
+                            {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
                     </Box>
                 </Flex>
