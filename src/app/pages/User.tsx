@@ -14,6 +14,7 @@ export const User = (props: any) => {
     const [allowRegister, setAllowRegister] = useState(true);
     const [isRegistering, setIsRegistering] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const checkUsernameID = useRef("");
 
     const checkUsername = debounce(async (username: string) => {
         if (username) {
@@ -33,10 +34,12 @@ export const User = (props: any) => {
                 setIsInvalid(false);
                 setErrorText("");
                 setAllowRegister(true);
+                checkUsernameID.current = "";
             } else {
                 setIsInvalid(true);
                 setErrorText(`Username ${username} is already taken`);
                 setAllowRegister(false);
+                checkUsernameID.current = username;
             }
         }
     }, 300);
@@ -74,6 +77,26 @@ export const User = (props: any) => {
         }
     }, []);
 
+    const login = async (userID: string) => {
+        GetLoginChallenge(userID)
+            .then((res: any) => {
+                console.log("Start authentication");
+                startAuthentication(res.options)
+                    .then(async authResp => {
+                        console.log("Authentication success");
+                        console.log(authResp);
+                        await UserLogin(res.uuid, authResp);
+                        setIsLoggingIn(false);
+                    })
+            })
+            .catch(err => {
+                console.log("Failed to start authentication");
+                console.log(err);
+                setErrorText("Failed to start authentication");
+                setIsLoggingIn(false);
+            });
+    }
+
     useEffect(() => {
         if (isLoggingIn) {
             const userID = localStorage.getItem("userID");
@@ -82,25 +105,10 @@ export const User = (props: any) => {
                 setIsLoggingIn(false);
                 return;
             }
-            GetLoginChallenge(userID)
-                .then((res: any) => {
-                    console.log("Start authentication");
-                    startAuthentication(res.options)
-                        .then(async authResp => {
-                            console.log("Authentication success");
-                            console.log(authResp);
-                            await UserLogin(res.uuid, authResp);
-                            setIsLoggingIn(false);
-                        })
-                })
-                .catch(err => {
-                    console.log("Failed to start authentication");
-                    console.log(err);
-                    setErrorText("Failed to start authentication");
-                    setIsLoggingIn(false);
-                });
+            login(userID);
         }
     }, [isLoggingIn]);
+
 
     return (
         <>
@@ -116,12 +124,9 @@ export const User = (props: any) => {
                             flexDirection={"row"}
                             alignItems={"center"}
                             textColor={"black"}
-                            transition={"all 0.2s ease"}
-                            flex={"1"}
-                            flexDir={"row"}
                             gap={"0.5rem"}
                         >
-                            <Spinner size='md' /> <Text>Signing in...</Text>
+                            <Spinner size='md' ml={"0.5rem"} /><Text>Signing in...</Text>
                         </Box>
                     ) : (<Box
                         shadow={"lg"} rounded={"lg"} p={"0.5rem"}
@@ -155,13 +160,13 @@ export const User = (props: any) => {
                             alignItems={"center"}
                             textColor={"white"}
                             transition={"all 0.2s ease"}
-                            onClick={(e) => { isRegistering ? e.preventDefault() : e.preventDefault(); register(userNameInput.current?.value || ""); }}
+                            onClick={(e) => { isRegistering ? login(checkUsernameID.current) : register(userNameInput.current?.value || "") }}
                         >
                             {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
                     </Box>)}
                 </Flex>
-            </GridItem>
+            </GridItem >
         </>
     )
 };
