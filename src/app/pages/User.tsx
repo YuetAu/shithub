@@ -3,7 +3,7 @@ import { browserSupportsWebAuthnAutofill, startAuthentication, startRegistration
 import { platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from "@tabler/icons-react";
 import { debounce } from "lodash";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { GetLoginChallenge, UserLogin, UserRegister } from "../helper/User";
 
 export const User = (props: any) => {
@@ -71,11 +71,21 @@ export const User = (props: any) => {
             console.log("User already registered");
             console.log("Try to login with userID: " + userID);
             setIsLoggingIn(true);
+        }
+    }, []);
 
+    useEffect(() => {
+        if (isLoggingIn) {
+            const userID = localStorage.getItem("userID");
+            if (!userID) {
+                console.log("No userID found");
+                setIsLoggingIn(false);
+                return;
+            }
             GetLoginChallenge(userID)
                 .then((res: any) => {
                     console.log("Start authentication");
-                    startAuthentication(res.options)
+                    startAuthentication(res.options, true)
                         .then(async authResp => {
                             console.log("Authentication success");
                             console.log(authResp);
@@ -89,9 +99,8 @@ export const User = (props: any) => {
                     setErrorText("Failed to start authentication");
                     setIsLoggingIn(false);
                 });
-
         }
-    }, []);
+    }, [isLoggingIn]);
 
     return (
         <>
