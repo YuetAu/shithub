@@ -87,6 +87,7 @@ export const User = (props: any) => {
                         console.log(authResp);
                         await UserLogin(res.uuid, authResp);
                         setIsLoggingIn(false);
+                        localStorage.setItem("userID", userID);
                     })
             })
             .catch(err => {
