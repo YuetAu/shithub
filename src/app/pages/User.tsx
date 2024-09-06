@@ -61,13 +61,7 @@ export const User = (props: any) => {
         setIsRegistering(false);
     }
 
-    const isFirstRendering = useRef(true);
-
     useEffect(() => {
-        if (isFirstRendering.current) {
-            isFirstRendering.current = false;
-            return;
-        }
         if (!platformAuthenticatorIsAvailable()) {
             console.log("Platform Authenticator is not available");
             return;
