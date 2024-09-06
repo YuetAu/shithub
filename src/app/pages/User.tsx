@@ -18,6 +18,7 @@ export const User = (props: any) => {
 
     const checkUsername = debounce(async (username: string) => {
         if (username) {
+            console.log("Checking username: " + username);
             const response = await fetch(`https://shithub-backend.yuetau.workers.dev/user/check-username/${username}`);
             if (!response.ok) {
                 console.log("Failed to check username");
@@ -39,7 +40,7 @@ export const User = (props: any) => {
                 setIsInvalid(true);
                 setErrorText(`Username ${username} is already taken`);
                 setAllowRegister(false);
-                checkUsernameID.current = username;
+                checkUsernameID.current = data.userID;
             }
         }
     }, 300);
@@ -78,6 +79,7 @@ export const User = (props: any) => {
     }, []);
 
     const login = async (userID: string) => {
+        console.log("Start login with userID: " + userID);
         GetLoginChallenge(userID)
             .then((res: any) => {
                 console.log("Start authentication");
@@ -161,7 +163,7 @@ export const User = (props: any) => {
                             alignItems={"center"}
                             textColor={"white"}
                             transition={"all 0.2s ease"}
-                            onClick={(e) => { isRegistering ? login(checkUsernameID.current) : register(userNameInput.current?.value || "") }}
+                            onClick={(e) => { isRegistering ? login() : register(userNameInput.current?.value || "") }}
                         >
                             {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
