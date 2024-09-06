@@ -163,7 +163,7 @@ export const User = (props: any) => {
                             alignItems={"center"}
                             textColor={"white"}
                             transition={"all 0.2s ease"}
-                            onClick={(e) => { isRegistering ? login(checkUsernameID.current) : register(userNameInput.current?.value || "") }}
+                            onClick={(e) => { allowRegister ? register(userNameInput.current?.value || "") : login(checkUsernameID.current) }}
                         >
                             {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
