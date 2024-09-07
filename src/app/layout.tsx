@@ -1,4 +1,3 @@
-"use client"
 import { useReducer } from 'react'
 import { AuthContext, AuthDispatchContext } from './context/authContext'
 import { Providers } from './provider'
