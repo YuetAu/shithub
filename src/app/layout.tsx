@@ -1,6 +1,7 @@
 import { Providers } from './provider'
 import './styles/globals.css'
 import { Metadata } from 'next'
+import { AuthContext } from './context/authContext'
 
 export const metadata: Metadata = {
   title: "ShitHub",
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          {children}
+          <AuthContext.Provider value={{ auth: false }}>
+            {children}
+          </AuthContext.Provider>
         </Providers>
       </body>
     </html>

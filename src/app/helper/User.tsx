@@ -62,6 +62,8 @@ export const UserRegister = async (username: string) => {
         return false;
     }
     localStorage.setItem("userID", registerData.userID);
+    localStorage.setItem("AToken", registerData.AToken);
+    localStorage.setItem("RToken", registerData.RToken);
     return true;
 };
 
