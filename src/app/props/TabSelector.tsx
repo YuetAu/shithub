@@ -1,41 +1,49 @@
-import { Box } from "@chakra-ui/react"
-import { IconAwardFilled, IconPooFilled, IconUserFilled } from "@tabler/icons-react"
+import React from 'react';
+import { Box, Flex } from "@chakra-ui/react";
+import { IconPooFilled, IconUserFilled } from "@tabler/icons-react";
 
-const TABS = [
-    {
-        icon: IconPooFilled,
-    },
-    {
-        icon: IconUserFilled,
-    }
-]
+interface Tab {
+    icon: React.ComponentType<any>;
+}
 
-export const TabSelector = (props: any) => {
+const TABS: Tab[] = [
+    { icon: IconPooFilled },
+    { icon: IconUserFilled },
+];
+
+interface TabSelectorProps {
+    tab: number;
+    setTab: (index: number) => void;
+}
+
+export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
     return (
-        <Box
-            shadow={"lg"} rounded={"lg"} px={"1.5em"}
-            bgColor={"white"}
-            userSelect={"none"}
-            //cursor={"pointer"}
-            zIndex="99"
-            display={"flex"}
-            flexDirection={"row"}
-            justifyContent={"space-around"}
-            alignItems={"center"}
-            gap={"5em"}
+        <Flex
+            shadow="lg"
+            rounded="lg"
+            px="1.5em"
+            bgColor="white"
+            userSelect="none"
+            zIndex={99} // Increased z-index
+            justifyContent="space-around"
+            alignItems="center"
+            gap="5rem"
+            position="relative" // Added position relative
         >
-            {TABS.map((tab, i) => (
+            {TABS.map((tabItem, index) => (
                 <Box
-                    key={i}
-                    onClick={() => props.setTab(i)}
-                    cursor={"pointer"}
-                    bgColor={props.tab === i ? "gray.200" : "white"}
-                    rounded={"lg"}
-                    m={"0.5em"}
+                    key={index}
+                    onClick={() => setTab(index)}
+                    cursor="pointer"
+                    bgColor={tab === index ? "gray.200" : "white"}
+                    rounded="lg"
+                    m="0.5em"
+                    transition="background-color 0.2s"
+                    _hover={{ bgColor: "gray.100" }}
                 >
-                    <tab.icon size={50} />
+                    <tabItem.icon size={50} />
                 </Box>
             ))}
-        </Box>
-    )
-}
+        </Flex>
+    );
+};

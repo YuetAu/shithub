@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://shithub-backend.yuetau.workers.dev";

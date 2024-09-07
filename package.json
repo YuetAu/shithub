@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,6 +16,7 @@
     "@simplewebauthn/browser": "^10.0.0",
     "@tabler/icons-react": "^3.14.0",
     "@types/lodash": "^4.17.7",
+    "babel-preset-next": "^1.4.0",
     "framer-motion": "^11.4.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.438.0",

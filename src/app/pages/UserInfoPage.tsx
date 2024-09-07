@@ -18,10 +18,15 @@ export const UserInfoPage = (props: any) => {
                     flexDirection={"column"}
                     alignItems={"center"}
                     textColor={"black"}
+                    flex={"1"}
+                    flexDir={"column"}
+                    justifySelf={"center"}
+                    alignSelf={"center"}
+                    textAlign={"center"}
                     gap={"0.5rem"}
                 >
                     <Text>UserID: {auth.user.userID}</Text>
-                    <Text>Username: {auth.user.username}</Text>
+                    <Text>Username: {auth.user.userName}</Text>
                 </Box>
             </GridItem>
         </>

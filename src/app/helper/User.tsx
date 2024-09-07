@@ -2,6 +2,7 @@ import { platformAuthenticatorIsAvailable, startRegistration } from "@simpleweba
 import { AuthDispatchContext } from "../context/authContext";
 import { authFetch } from "./authFetch";
 import { useContext } from "react";
+import { BACKEND_URL } from "../common/const";
 
 export const UserRegister = async (username: string) => {
     const authDispatch = useContext(AuthDispatchContext);
@@ -14,7 +15,7 @@ export const UserRegister = async (username: string) => {
         alert("Platform Authenticator is not available");
         return;
     }
-    const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/reg-challenge`, {
+    const challengeResponse = await fetch(`${BACKEND_URL}/user/reg-challenge`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

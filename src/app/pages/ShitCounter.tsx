@@ -1,5 +1,7 @@
 import { Box, Flex, GridItem, Text, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { authFetch } from "../helper/authFetch";
+import { BACKEND_URL } from "../common/const";
 
 export const ShitCounter = (props: any) => {
 
@@ -24,6 +26,7 @@ export const ShitCounter = (props: any) => {
             }
         }
         localStorage.setItem("lastTime", currentTime.toString());
+        authFetch(`${BACKEND_URL}/shit`, "POST", { time: currentTime });
         setCounter(counter + 1);
     };
 

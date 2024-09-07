@@ -1,69 +1,81 @@
-export const authFetch = async (url: string, method: string, body?: any, retryCounter: number = 0): Promise<any> => {
-    const token = localStorage.getItem("AToken");
-    if (!token) {
-        console.log("No token found");
-        return false;
-    }
-    const response = await fetch(url, {
-        method: method,
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-        },
-        body: body && JSON.stringify(body)
-    });
-    if (!response.ok) {
-        if (response.status === 401 && retryCounter < 1) {
-            console.log("Unauthorized");
-            console.log("Try to refresh token");
-
-            const refreshToken = localStorage.getItem("RToken");
-            if (!refreshToken) {
-                console.log("No refresh token found");
-                return false;
-            }
-            const refreshResponse = await fetch("https://shithub-backend.yuetau.workers.dev/auth/refresh-at", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${refreshToken}`
-                }
-            });
-            if (!refreshResponse.ok) {
-                console.log("Failed to refresh token");
-                localStorage.removeItem("AToken");
-                localStorage.removeItem("RToken");
-                return false;
-            }
-            let refreshData;
-            try {
-                refreshData = await refreshResponse.json();
-            } catch (e) {
-                console.log("Failed to parse refresh response");
-                localStorage.removeItem("AToken");
-                localStorage.removeItem("RToken");
-                return false;
-            }
-            if (!refreshData || !refreshData.success || !refreshData.token) {
-                console.log("Failed to get new access token");
-                localStorage.removeItem("AToken");
-                localStorage.removeItem("RToken");
-                return false;
-            }
-            localStorage.setItem("AToken", refreshData.token);
-            console.log("Token refreshed");
-            return authFetch(url, method, body, retryCounter + 1);
-        } else {
-            console.log("Failed to fetch");
-            return false;
-        }
-    }
-    let data;
-    try {
-        data = await response.json();
-    } catch (e) {
-        console.log("Failed to parse response");
-        return false;
-    }
-    return data;
+import { BACKEND_URL } from '../common/const';
+interface RefreshResponse {
+    success: boolean;
+    token: string;
 }
+
+const refreshAccessToken = async (): Promise<string | null> => {
+    const refreshToken = localStorage.getItem('RToken');
+    if (!refreshToken) {
+        console.log('No refresh token found');
+        return null;
+    }
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/auth/refresh-at`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${refreshToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to refresh token');
+        }
+
+        const data: RefreshResponse = await response.json();
+        if (!data.success || !data.token) {
+            throw new Error('Invalid refresh response');
+        }
+
+        localStorage.setItem('AToken', data.token);
+        console.log('Token refreshed');
+        return data.token;
+    } catch (error) {
+        console.error('Error refreshing token:', error);
+        localStorage.removeItem('AToken');
+        localStorage.removeItem('RToken');
+        return null;
+    }
+};
+
+export const authFetch = async (
+    url: string,
+    method: string,
+    body?: any,
+    retryCounter: number = 0
+): Promise<any> => {
+    const token = localStorage.getItem('AToken');
+    if (!token) {
+        console.log('No token found');
+        return null;
+    }
+
+    try {
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: body ? JSON.stringify(body) : undefined
+        });
+
+        if (!response.ok) {
+            if (response.status === 401 && retryCounter < 1) {
+                console.log('Unauthorized. Attempting to refresh token...');
+                const newToken = await refreshAccessToken();
+                if (newToken) {
+                    return authFetch(url, method, body, retryCounter + 1);
+                }
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        return null;
+    }
+};
