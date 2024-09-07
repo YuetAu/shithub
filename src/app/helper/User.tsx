@@ -1,4 +1,6 @@
 import { platformAuthenticatorIsAvailable, startRegistration } from "@simplewebauthn/browser";
+import { useAuthDispatch } from "../context/authContext";
+import { authFetch } from "./authFetch";
 
 export const UserRegister = async (username: string) => {
     username = username.trim();
@@ -64,36 +66,9 @@ export const UserRegister = async (username: string) => {
     localStorage.setItem("userID", registerData.userID);
     localStorage.setItem("AToken", registerData.AToken);
     localStorage.setItem("RToken", registerData.RToken);
+    const authDispatch = useAuthDispatch();
+    authDispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
-};
-
-export const GetLoginChallenge = async (userID: string) => {
-    const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login-challenge`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            userID: userID,
-        }),
-    });
-    if (!challengeResponse.ok) {
-        console.log("Failed to get login challenge ERR: FETCH-CHALLENGE");
-        return false;
-    }
-    let challengeData;
-    try {
-        challengeData = await challengeResponse.json();
-    } catch (e) {
-        console.log("Failed to get login challenge ERR: PARSE-CHALLENGE");
-        return false;
-    }
-    if (!challengeData || !challengeData.success || !challengeData.options || !challengeData.uuid) {
-        console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
-        return false;
-    }
-    console.log("Challenge data: ", challengeData);
-    return challengeData;
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {
@@ -125,6 +100,57 @@ export const UserLogin = async (uuid: string, authResp: any) => {
     localStorage.setItem("userID", loginData.userID);
     localStorage.setItem("AToken", loginData.AToken);
     localStorage.setItem("RToken", loginData.RToken);
-    alert("Login success");
+    const authDispatch = useAuthDispatch();
+    authDispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
+};
+
+export const GetUserInfo = async () => {
+    const infoResponse = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
+    if (!infoResponse.ok) {
+        console.log("Failed to get user info ERR: FETCH-INFO");
+        return false;
+    }
+    let infoData;
+    try {
+        infoData = await infoResponse.json();
+    } catch (e) {
+        console.log("Failed to get user info ERR: PARSE-INFO");
+        return false;
+    }
+    if (!infoData || !infoData.success || !infoData.username) {
+        console.log("Failed to get user info ERR: INVALID-INFO");
+        return false;
+    }
+    return infoData;
+}
+
+
+export const GetLoginChallenge = async (userID: string) => {
+    const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login-challenge`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userID: userID,
+        }),
+    });
+    if (!challengeResponse.ok) {
+        console.log("Failed to get login challenge ERR: FETCH-CHALLENGE");
+        return false;
+    }
+    let challengeData;
+    try {
+        challengeData = await challengeResponse.json();
+    } catch (e) {
+        console.log("Failed to get login challenge ERR: PARSE-CHALLENGE");
+        return false;
+    }
+    if (!challengeData || !challengeData.success || !challengeData.options || !challengeData.uuid) {
+        console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
+        return false;
+    }
+    console.log("Challenge data: ", challengeData);
+    return challengeData;
 };

@@ -1,3 +1,5 @@
+import { useAuthDispatch } from "../context/authContext";
+
 export const authFetch = async (url: string, method: string, body?: any, retryCounter: number = 0): Promise<any> => {
     const token = localStorage.getItem("AToken");
     if (!token) {
@@ -33,6 +35,8 @@ export const authFetch = async (url: string, method: string, body?: any, retryCo
                 console.log("Failed to refresh token");
                 localStorage.removeItem("AToken");
                 localStorage.removeItem("RToken");
+                const authDispatch = useAuthDispatch();
+                authDispatch({ type: "LOGOUT" });
                 return false;
             }
             let refreshData;
@@ -42,12 +46,16 @@ export const authFetch = async (url: string, method: string, body?: any, retryCo
                 console.log("Failed to parse refresh response");
                 localStorage.removeItem("AToken");
                 localStorage.removeItem("RToken");
+                const authDispatch = useAuthDispatch();
+                authDispatch({ type: "LOGOUT" });
                 return false;
             }
             if (!refreshData || !refreshData.success || !refreshData.token) {
                 console.log("Failed to get new access token");
                 localStorage.removeItem("AToken");
                 localStorage.removeItem("RToken");
+                const authDispatch = useAuthDispatch();
+                authDispatch({ type: "LOGOUT" });
                 return false;
             }
             localStorage.setItem("AToken", refreshData.token);

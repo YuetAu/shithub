@@ -7,7 +7,7 @@ import { use, useEffect, useRef, useState } from "react";
 import { GetLoginChallenge, UserLogin, UserRegister } from "../helper/User";
 import { authFetch } from "../helper/authFetch";
 
-export const User = (props: any) => {
+export const UserLoginPage = (props: any) => {
 
     const userNameInput = useRef<HTMLInputElement>(null);
     const [isInvalid, setIsInvalid] = useState(false);
