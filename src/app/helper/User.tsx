@@ -120,5 +120,9 @@ export const UserLogin = async (uuid: string, authResp: any) => {
         console.log("Failed to login ERR: INVALID-LOGIN");
         return false;
     }
+    localStorage.setItem("userID", loginData.userID);
+    localStorage.setItem("AToken", loginData.AToken);
+    localStorage.setItem("RToken", loginData.RToken);
     alert("Login success");
+    return true;
 };

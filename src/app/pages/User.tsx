@@ -5,6 +5,7 @@ import { IconKeyFilled } from "@tabler/icons-react";
 import { debounce } from "lodash";
 import { use, useEffect, useRef, useState } from "react";
 import { GetLoginChallenge, UserLogin, UserRegister } from "../helper/User";
+import { authFetch } from "../helper/authFetch";
 
 export const User = (props: any) => {
 
@@ -73,8 +74,20 @@ export const User = (props: any) => {
         const userID = localStorage.getItem("userID");
         if (userID) {
             console.log("User already registered");
-            console.log("Try to login with userID: " + userID);
-            setIsLoggingIn(true);
+            const AToken = localStorage.getItem("AToken");
+            if (AToken) {
+                console.log("Already logged in");
+                console.log("Test fetch");
+                authFetch("https://shithub-backend.yuetau.workers.dev/user/me", "GET").then(res => {
+                    console.log(res);
+                    alert("Already logged in");
+                    // Need to supply userDetail Context Provider
+                });
+            } else {
+                console.log("Try to login with userID: " + userID);
+                setIsLoggingIn(true);
+                return;
+            }
         }
     }, []);
 
@@ -89,7 +102,6 @@ export const User = (props: any) => {
                         console.log(authResp);
                         await UserLogin(res.uuid, authResp);
                         setIsLoggingIn(false);
-                        localStorage.setItem("userID", userID);
                     })
             })
             .catch(err => {
@@ -102,7 +114,9 @@ export const User = (props: any) => {
 
     useEffect(() => {
         if (isLoggingIn) {
-            const userID = localStorage.getItem("userID");
+            const userIDLS = localStorage.getItem("userID");
+            const userIDRef = checkUsernameID.current;
+            const userID = userIDRef || userIDLS;
             if (!userID) {
                 console.log("No userID found");
                 setIsLoggingIn(false);
@@ -163,7 +177,7 @@ export const User = (props: any) => {
                             alignItems={"center"}
                             textColor={"white"}
                             transition={"all 0.2s ease"}
-                            onClick={(e) => { allowRegister ? register(userNameInput.current?.value || "") : login(checkUsernameID.current) }}
+                            onClick={(e) => { allowRegister ? register(userNameInput.current?.value || "") : setIsLoggingIn(true) }}
                         >
                             {isRegistering ? (<Spinner size='md' />) : (<><IconKeyFilled size={"20"} /><Text fontSize={"20"} fontWeight={"500"} ml={"1"}>{allowRegister ? "Register" : "Sign In"} with Passkey</Text></>)}
                         </Box>
