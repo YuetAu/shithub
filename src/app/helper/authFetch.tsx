@@ -31,6 +31,8 @@ export const authFetch = async (url: string, method: string, body?: any, retryCo
             });
             if (!refreshResponse.ok) {
                 console.log("Failed to refresh token");
+                localStorage.removeItem("AToken");
+                localStorage.removeItem("RToken");
                 return false;
             }
             let refreshData;
@@ -38,10 +40,14 @@ export const authFetch = async (url: string, method: string, body?: any, retryCo
                 refreshData = await refreshResponse.json();
             } catch (e) {
                 console.log("Failed to parse refresh response");
+                localStorage.removeItem("AToken");
+                localStorage.removeItem("RToken");
                 return false;
             }
             if (!refreshData || !refreshData.success || !refreshData.token) {
                 console.log("Failed to get new access token");
+                localStorage.removeItem("AToken");
+                localStorage.removeItem("RToken");
                 return false;
             }
             localStorage.setItem("AToken", refreshData.token);
