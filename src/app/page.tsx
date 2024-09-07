@@ -8,6 +8,7 @@ import React from "react";
 import { ShitCounter } from "./pages/ShitCounter";
 import { UserLoginPage } from "./pages/UserLoginPage";
 import { useAuth } from "./context/authContext";
+import { UserInfoPage } from "./pages/UserInfoPage";
 
 export default function Home() {
   // [Sys] ContinerHeight Helper Functions and States
@@ -51,13 +52,13 @@ export default function Home() {
           zIndex="99"
         >
           {tab === 0 && <ShitCounter />}
-          {tab === 1 && (auth.auth ? <>:<UserLoginPage />)}
-            <GridItem>
-              <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
-                <TabSelector tab={tab} setTab={setTab} />
-              </Flex>
-            </GridItem>
-          </Grid>
+          {tab === 1 && (auth.auth ? <UserInfoPage /> : <UserLoginPage />)}
+          <GridItem>
+            <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
+              <TabSelector tab={tab} setTab={setTab} />
+            </Flex>
+          </GridItem>
+        </Grid>
       </Box>
     </>
   );
