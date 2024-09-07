@@ -101,6 +101,7 @@ export const User = (props: any) => {
                         console.log("Authentication success");
                         console.log(authResp);
                         await UserLogin(res.uuid, authResp);
+                        console.log(await authFetch("https://shithub-backend.yuetau.workers.dev/user/me", "GET"));
                         setIsLoggingIn(false);
                     })
             })
