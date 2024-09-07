@@ -1,9 +1,9 @@
 import { Box, Flex, GridItem, Input, Spinner, Text } from "@chakra-ui/react";
-import { browserSupportsWebAuthnAutofill, startAuthentication, startRegistration } from "@simplewebauthn/browser";
+import { startAuthentication } from "@simplewebauthn/browser";
 import { platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from "@tabler/icons-react";
 import { debounce } from "lodash";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetLoginChallenge, UserLogin, UserRegister } from "../helper/User";
 import { authFetch } from "../helper/authFetch";
 

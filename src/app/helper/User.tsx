@@ -1,8 +1,10 @@
 import { platformAuthenticatorIsAvailable, startRegistration } from "@simplewebauthn/browser";
-import { useAuthDispatch } from "../context/authContext";
+import { AuthDispatchContext } from "../context/authContext";
 import { authFetch } from "./authFetch";
+import { useContext } from "react";
 
 export const UserRegister = async (username: string) => {
+    const authDispatch = useContext(AuthDispatchContext);
     username = username.trim();
     if (!username || username.length === 0) {
         alert("Please enter a username");
@@ -66,12 +68,12 @@ export const UserRegister = async (username: string) => {
     localStorage.setItem("userID", registerData.userID);
     localStorage.setItem("AToken", registerData.AToken);
     localStorage.setItem("RToken", registerData.RToken);
-    const authDispatch = useAuthDispatch();
     authDispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {
+    const authDispatch = useContext(AuthDispatchContext);
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
         headers: {
@@ -100,7 +102,6 @@ export const UserLogin = async (uuid: string, authResp: any) => {
     localStorage.setItem("userID", loginData.userID);
     localStorage.setItem("AToken", loginData.AToken);
     localStorage.setItem("RToken", loginData.RToken);
-    const authDispatch = useAuthDispatch();
     authDispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
 };

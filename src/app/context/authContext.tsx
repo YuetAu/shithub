@@ -10,11 +10,3 @@ export const useAuth = () => {
     }
     return auth;
 }
-
-export const useAuthDispatch = () => {
-    const dispatch = useContext(AuthDispatchContext);
-    if (!dispatch) {
-        throw new Error('useAuthDispatch must be used within an AuthProvider');
-    }
-    return dispatch;
-}

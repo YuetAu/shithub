@@ -1,5 +1,3 @@
-import { useReducer } from 'react'
-import { AuthContext, AuthDispatchContext } from './context/authContext'
 import { Providers } from './provider'
 import './styles/globals.css'
 import { Metadata } from 'next'
@@ -15,15 +13,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
-  
-
   return (
     <html>
       <body>
         <Providers>
-              {children}
-           
+          {children}
         </Providers>
       </body>
     </html>
