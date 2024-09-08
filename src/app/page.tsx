@@ -22,6 +22,8 @@ const authReducer = (state: any, action: { type: string; payload?: any }) => {
       return { auth: true, user: action.payload };
     case 'LOGOUT':
       return { auth: false, user: null };
+    case 'SHIT':
+      return { ...state, user: { ...state.user, shitCount: action.payload } }
     default:
       return state;
   }

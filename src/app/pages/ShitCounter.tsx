@@ -1,11 +1,15 @@
 import { Box, Flex, GridItem, Text, useToast } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
+import { AuthDispatchContext, useAuth } from "../context/authContext";
 
 export const ShitCounter = (props: any) => {
 
     const toast = useToast();
+
+    const auth = useAuth();
+    const authDispatch = useContext(AuthDispatchContext);
 
     const [counter, setCounter] = useState(0);
 
@@ -26,9 +30,52 @@ export const ShitCounter = (props: any) => {
             }
         }
         localStorage.setItem("lastTime", currentTime.toString());
-        authFetch(`${BACKEND_URL}/shit`, "POST", { time: currentTime });
-        setCounter(counter + 1);
+
+
+        auth.auth ? authFetch(`${BACKEND_URL}/shit`, "POST", { time: currentTime }).then((response) => {
+            if (response.success) {
+                toast({
+                    title: "成功",
+                    description: "屙咗一波",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
+                authDispatch({ type: "SHIT", payload: response.count });
+            } else {
+                toast({
+                    title: "唔好意思",
+                    description: "屙唔到",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                });
+            }
+        }) : unAuthedShit(counter + 1);
     };
+
+    const unAuthedShit = (newCounter: number) => {
+        setCounter(newCounter);
+        localStorage.setItem("unAuthedShit", String(newCounter));
+        toast({
+            title: "成功",
+            description: "登入之後先可以將你啲屎上傳去雲端",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+        });
+    }
+
+    useEffect(() => {
+        if (auth.auth && auth.user.shitCount) {
+            setCounter(auth.user.shitCount || 0);
+        } else if (!auth.auth) {
+            const unAuthedShit = localStorage.getItem("unAuthedShit");
+            if (unAuthedShit) {
+                setCounter(parseInt(unAuthedShit));
+            }
+        }
+    }, [auth]);
 
     return (
         <>
