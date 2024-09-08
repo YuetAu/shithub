@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Flex } from "@chakra-ui/react";
-import { IconPooFilled, IconUserFilled } from "@tabler/icons-react";
+import { IconAwardFilled, IconPooFilled, IconUserFilled } from "@tabler/icons-react";
+import { useAuth } from '../context/authContext';
 
 interface Tab {
     icon: React.ComponentType<any>;
+    order?: number;
 }
 
 const TABS: Tab[] = [
-    { icon: IconPooFilled },
-    { icon: IconUserFilled },
+    { icon: IconPooFilled, order: 1 },
+    { icon: IconUserFilled, order: 10 },
 ];
+
+const AUTHED_TABS: Tab[] = [
+    { icon: IconAwardFilled, order: 2 },
+]
 
 interface TabSelectorProps {
     tab: number;
@@ -17,6 +23,21 @@ interface TabSelectorProps {
 }
 
 export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
+
+    const auth = useAuth();
+
+    const [renderTAB, setRenderTAB] = React.useState<Tab[]>(TABS);
+
+    useEffect(() => {
+        if (auth.auth) {
+            setRenderTAB([...TABS, ...AUTHED_TABS].sort((a, b) => (a.order || 0) - (b.order || 0)));
+        } else {
+            setRenderTAB(TABS);
+        }
+    }, [auth]);
+
+
+
     return (
         <Flex
             shadow="lg"
@@ -30,7 +51,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
             gap="5rem"
             position="relative" // Added position relative
         >
-            {TABS.map((tabItem, index) => (
+            {renderTAB.map((tabItem, index) => (
                 <Box
                     key={index}
                     onClick={() => setTab(index)}
