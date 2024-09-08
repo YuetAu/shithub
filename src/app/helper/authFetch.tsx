@@ -53,6 +53,7 @@ export const authFetch = async (
     }
 
     try {
+        console.log('Fetching with Auth:', url);
         const response = await fetch(url, {
             method,
             headers: {

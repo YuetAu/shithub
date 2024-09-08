@@ -5,7 +5,7 @@ import { IconKeyFilled } from '@tabler/icons-react';
 import { debounce } from 'lodash';
 import { GetLoginChallenge, UserLogin, UserRegister } from '../helper/User';
 import { authFetch } from '../helper/authFetch';
-import { AuthDispatchContext } from '../context/authContext';
+import { AuthDispatchContext, useAuthDispatch } from '../context/authContext';
 import { BACKEND_URL } from '../common/const';
 
 export const UserLoginPage: React.FC = () => {
@@ -20,7 +20,7 @@ export const UserLoginPage: React.FC = () => {
 
     const userNameInputRef = useRef<HTMLInputElement>(null);
     const checkUsernameIDRef = useRef('');
-    const authDispatch = useContext(AuthDispatchContext);
+    const authDispatch = useAuthDispatch();
 
     const updateState = (newState: Partial<typeof state>) => setState(prev => ({ ...prev, ...newState }));
 
@@ -48,8 +48,8 @@ export const UserLoginPage: React.FC = () => {
         try {
             if (state.allowRegister) {
                 const res = await UserRegister(state.username);
-                if (res) alert('Registration success');
-                else throw new Error('Registration failed');
+                //if (res) alert('Registration success');
+                if (!res) throw new Error('Registration failed');
             } else {
                 const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
                 if (!userID) throw new Error('No userID found');

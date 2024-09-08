@@ -5,6 +5,7 @@ import { useAuth } from '../context/authContext';
 import { ShitCounter } from '../pages/ShitCounter';
 import { UserInfoPage } from '../pages/UserInfoPage';
 import { UserLoginPage } from '../pages/UserLoginPage';
+import { ScoreboardPage } from '../pages/Scoreboard';
 
 interface Tab {
     icon: React.ComponentType<any>;
@@ -30,7 +31,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
     ];
 
     const AUTHED_TABS: Tab[] = [
-        { icon: IconAwardFilled, order: 2, page: UserInfoPage },
+        { icon: IconAwardFilled, order: 2, page: ScoreboardPage },
     ];
 
     const [renderTAB, setRenderTAB] = useState<Tab[]>(TABS);

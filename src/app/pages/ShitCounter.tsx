@@ -1,15 +1,15 @@
 import { Box, Flex, GridItem, Text, useToast } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
-import { AuthDispatchContext, useAuth } from "../context/authContext";
+import { useAuth, useAuthDispatch } from "../context/authContext";
 
 export const ShitCounter = (props: any) => {
 
     const toast = useToast();
 
     const auth = useAuth();
-    const authDispatch = useContext(AuthDispatchContext);
+    const authDispatch = useAuthDispatch();
 
     const [counter, setCounter] = useState(0);
 
@@ -31,8 +31,10 @@ export const ShitCounter = (props: any) => {
         }
         localStorage.setItem("lastTime", currentTime.toString());
 
+        const newCounter = counter + 1;
+        setCounter(newCounter);
 
-        auth.auth ? authFetch(`${BACKEND_URL}/shit`, "POST", { time: currentTime }).then((response) => {
+        auth.auth ? (authFetch(`${BACKEND_URL}/shit`, "POST", { time: currentTime }).then((response) => {
             if (response.success) {
                 toast({
                     title: "成功",
@@ -51,11 +53,10 @@ export const ShitCounter = (props: any) => {
                     isClosable: true,
                 });
             }
-        }) : unAuthedShit(counter + 1);
+        })) : unAuthedShit(newCounter);
     };
 
     const unAuthedShit = (newCounter: number) => {
-        setCounter(newCounter);
         localStorage.setItem("unAuthedShit", String(newCounter));
         toast({
             title: "成功",

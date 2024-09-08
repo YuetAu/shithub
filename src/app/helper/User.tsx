@@ -1,18 +1,17 @@
 import { platformAuthenticatorIsAvailable, startRegistration } from "@simplewebauthn/browser";
-import { AuthDispatchContext } from "../context/authContext";
+import { useAuthDispatch } from "../context/authContext";
 import { authFetch } from "./authFetch";
-import { useContext } from "react";
 import { BACKEND_URL } from "../common/const";
 
 export const UserRegister = async (username: string) => {
-    const authDispatch = useContext(AuthDispatchContext);
+    const authDispatch = useAuthDispatch();
     username = username.trim();
     if (!username || username.length === 0) {
         alert("Please enter a username");
         return;
     }
     if (!await platformAuthenticatorIsAvailable()) {
-        alert("Platform Authenticator is not available");
+        alert("We are sorry, but your device does not support Passkey registration.");
         return;
     }
     const challengeResponse = await fetch(`${BACKEND_URL}/user/reg-challenge`, {
@@ -74,7 +73,7 @@ export const UserRegister = async (username: string) => {
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {
-    const authDispatch = useContext(AuthDispatchContext);
+    const authDispatch = useAuthDispatch();
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
         headers: {
