@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
-import { Box, Flex } from "@chakra-ui/react";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Box, Flex, Grid, GridItem } from "@chakra-ui/react";
 import { IconAwardFilled, IconPooFilled, IconUserFilled } from "@tabler/icons-react";
 import { useAuth } from '../context/authContext';
+import { ShitCounter } from '../pages/ShitCounter';
+import { UserInfoPage } from '../pages/UserInfoPage';
+import { UserLoginPage } from '../pages/UserLoginPage';
 
 interface Tab {
     icon: React.ComponentType<any>;
     order?: number;
+    page: React.ComponentType<any>;
 }
-
-const TABS: Tab[] = [
-    { icon: IconPooFilled, order: 1 },
-    { icon: IconUserFilled, order: 10 },
-];
-
-const AUTHED_TABS: Tab[] = [
-    { icon: IconAwardFilled, order: 2 },
-]
 
 interface TabSelectorProps {
     tab: number;
@@ -23,10 +18,22 @@ interface TabSelectorProps {
 }
 
 export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
-
     const auth = useAuth();
 
-    const [renderTAB, setRenderTAB] = React.useState<Tab[]>(TABS);
+    const renderTabContent = useCallback(() => {
+        return auth.auth ? <UserInfoPage /> : <UserLoginPage />;
+    }, [auth.auth]);
+
+    const TABS: Tab[] = [
+        { icon: IconPooFilled, order: 1, page: ShitCounter },
+        { icon: IconUserFilled, order: 10, page: renderTabContent },
+    ];
+
+    const AUTHED_TABS: Tab[] = [
+        { icon: IconAwardFilled, order: 2, page: UserInfoPage },
+    ];
+
+    const [renderTAB, setRenderTAB] = useState<Tab[]>(TABS);
 
     useEffect(() => {
         if (auth.auth) {
@@ -34,37 +41,52 @@ export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
         } else {
             setRenderTAB(TABS);
         }
-    }, [auth]);
+    }, [auth.auth]);
 
-
+    const CurrentTabComponent = renderTAB[tab]?.page;
 
     return (
-        <Flex
-            shadow="lg"
-            rounded="lg"
-            px="1.5em"
-            bgColor="white"
-            userSelect="none"
-            zIndex={99} // Increased z-index
-            justifyContent="space-around"
-            alignItems="center"
-            gap="5rem"
-            position="relative" // Added position relative
+        <Grid
+            h="100%"
+            w="sm"
+            m="auto"
+            templateRows="repeat(6, 1fr)"
+            templateColumns="repeat(1, 1fr)"
+            overflow="hidden"
+            zIndex={99}
         >
-            {renderTAB.map((tabItem, index) => (
-                <Box
-                    key={index}
-                    onClick={() => setTab(index)}
-                    cursor="pointer"
-                    bgColor={tab === index ? "gray.200" : "white"}
+            {CurrentTabComponent && <CurrentTabComponent />}
+            <GridItem>
+                <Flex
+                    shadow="lg"
                     rounded="lg"
-                    m="0.5em"
-                    transition="background-color 0.2s"
-                    _hover={{ bgColor: "gray.100" }}
+                    px="2"
+                    py="2"
+                    bgColor="white"
+                    userSelect="none"
+                    zIndex={99}
+                    justifyContent="space-between"
+                    width={`calc(100% - 5rem)`}
+                    m={"auto"}
+                    alignItems="center"
+                    position="relative"
                 >
-                    <tabItem.icon size={50} />
-                </Box>
-            ))}
-        </Flex>
+                    {renderTAB.map((tabItem, index) => (
+                        <Box
+                            key={index}
+                            onClick={() => setTab(index)}
+                            cursor="pointer"
+                            bgColor={tab === index ? "gray.300" : "white"}
+                            rounded="lg"
+                            p="2"
+                            transition="background-color 0.2s"
+                            _hover={{ bgColor: "gray.100" }}
+                        >
+                            <tabItem.icon size={40} />
+                        </Box>
+                    ))}
+                </Flex>
+            </GridItem>
+        </Grid>
     );
 };

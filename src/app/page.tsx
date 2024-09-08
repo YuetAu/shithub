@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useEffect, useReducer, useState, useCallback } from "react";
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import React, { useEffect, useReducer, useState } from "react";
+import { Box } from "@chakra-ui/react";
 import { AuthContext, AuthDispatchContext } from "./context/authContext";
-import { ShitCounter } from "./pages/ShitCounter";
-import { UserInfoPage } from "./pages/UserInfoPage";
-import { UserLoginPage } from "./pages/UserLoginPage";
 import { ShitBackground } from "./props/ShitBackground";
 import { TabSelector } from "./props/TabSelector";
 import { authFetch } from "./helper/authFetch";
@@ -79,17 +76,6 @@ const Home: React.FC = () => {
     }
   }, [auth]);
 
-  const renderTabContent = useCallback(() => {
-    switch (tab) {
-      case 0:
-        return <ShitCounter />;
-      case 1:
-        return auth.auth ? <UserInfoPage /> : <UserLoginPage />;
-      default:
-        return null;
-    }
-  }, [tab, auth.auth]);
-
   return (
     <AuthContext.Provider value={auth}>
       <AuthDispatchContext.Provider value={dispatch}>
@@ -101,20 +87,8 @@ const Home: React.FC = () => {
         >
           <ShitBackground containerHeight={containerHeight} />
 
-          <Grid
-            h="100%"
-            w="sm"
-            m="auto"
-            templateRows="repeat(6, 1fr)"
-            templateColumns="repeat(1, 1fr)"
-            overflow="hidden"
-            zIndex={99}
-          >
-            {renderTabContent()}
-            <GridItem>
-              <TabSelector tab={tab} setTab={setTab} />
-            </GridItem>
-          </Grid>
+
+          <TabSelector tab={tab} setTab={setTab} />
         </Box>
       </AuthDispatchContext.Provider>
     </AuthContext.Provider>
