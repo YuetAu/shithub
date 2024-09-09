@@ -96,7 +96,7 @@ export const UserInfoPage = () => {
                         <Text fontSize="sm" fontWeight="bold" color="gray.500" mb={1}>
                             法定姓名
                         </Text>
-                        <Text fontSize="xl" color="brown.800" fontWeight="bold">
+                        <Text fontSize="xl" color="brown.800" fontWeight="bold" noOfLines={1}>
                             {auth.user.userName}
                         </Text>
                     </Box>

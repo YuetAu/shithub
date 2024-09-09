@@ -91,7 +91,7 @@ export const ScoreboardPage = () => {
                                 <Text fontSize="2xl" fontWeight="bold" mr={2} color="brown.500">
                                     {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`}
                                 </Text>
-                                <Text fontSize="lg" fontWeight="bold" color="brown.800">
+                                <Text fontSize="lg" fontWeight="bold" color="brown.800" noOfLines={1}>
                                     {score.displayName || score.userName}
                                 </Text>
                             </Box>

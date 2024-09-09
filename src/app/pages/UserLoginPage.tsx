@@ -9,6 +9,8 @@ import { AuthDispatchContext, useAuthDispatch } from '../context/authContext';
 import { BACKEND_URL } from '../common/const';
 import { useTabSet } from '../context/tabContext';
 
+const ENGLISH = /^[A-Za-z0-9]*$/;
+
 export const UserLoginPage: React.FC = () => {
     const [state, setState] = useState({
         username: '',
@@ -17,6 +19,7 @@ export const UserLoginPage: React.FC = () => {
         allowRegister: true,
         isProcessing: false,
         isLoggingIn: false,
+        isLocked: false
     });
 
     const userNameInputRef = useRef<HTMLInputElement>(null);
@@ -28,6 +31,23 @@ export const UserLoginPage: React.FC = () => {
 
     const checkUsername = debounce(async (username: string) => {
         if (!username) return;
+        updateState({ isLocked: true })
+        if (!ENGLISH.test(username)) {
+            updateState({
+                isInvalid: true,
+                errorText: "Only English Character is accepted",
+                allowRegister: false,
+            });
+            return;
+        }
+        if (username.length > 10) {
+            updateState({
+                isInvalid: true,
+                errorText: "Username too long",
+                allowRegister: false,
+            });
+            return;
+        }
         try {
             const response = await fetch(`${BACKEND_URL}/user/check-username/${username}`);
             if (!response.ok) throw new Error('Failed to check username');
@@ -41,6 +61,7 @@ export const UserLoginPage: React.FC = () => {
         } catch (error) {
             console.error('Error checking username:', error);
         }
+        updateState({ isLocked: false })
     }, 300);
 
     const handleAuth = async () => {
@@ -147,13 +168,13 @@ export const UserLoginPage: React.FC = () => {
                 shadow="lg"
                 rounded="lg"
                 p="0.5rem"
-                bgColor={state.isProcessing ? "gray.600" : "black"}
+                bgColor={state.isProcessing || state.isLocked ? "gray.600" : "black"}
                 display="flex"
                 alignItems="center"
                 textColor="white"
-                transition="all 0.2s ease"
+                transition="all 0.1s ease"
                 onClick={handleAuth}
-                disabled={state.isProcessing}
+                disabled={state.isProcessing || state.isLocked}
             >
                 {state.isProcessing ? (
                     <Spinner size="md" />
@@ -187,15 +208,6 @@ export const UserLoginPage: React.FC = () => {
                         <Text>Signing in...</Text>
                     </Box>
                 ) : renderAuthContent()}
-                <Box
-                    position={"absolute"}
-                    top="0"
-                    left="0"
-                >
-                    {state.allowRegister ? "True" : "False"}
-                    {state.isLoggingIn ? "True" : "False"}
-                    {state.isProcessing ? "True" : "False"}
-                </Box>
             </Flex>
         </GridItem>
     );
