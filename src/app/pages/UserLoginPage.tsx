@@ -47,7 +47,7 @@ export const UserLoginPage: React.FC = () => {
 
         try {
             if (state.allowRegister) {
-                const res = await UserRegister(state.username);
+                const res = await UserRegister(state.username, authDispatch);
                 //if (res) alert('Registration success');
                 if (!res) throw new Error('Registration failed');
             } else {
@@ -55,7 +55,7 @@ export const UserLoginPage: React.FC = () => {
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
                 const authResp = await startAuthentication(challenge.options);
-                await UserLogin(challenge.uuid, authResp);
+                await UserLogin(challenge.uuid, authResp, authDispatch);
                 const userData = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
                 authDispatch({ type: 'LOGIN', payload: userData.user });
             }
