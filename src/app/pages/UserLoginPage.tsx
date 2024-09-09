@@ -55,7 +55,7 @@ export const UserLoginPage: React.FC = () => {
                 const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
-                const authResp = await startAuthentication(challenge.options);
+                const authResp = await startAuthentication(challenge.options, true);
                 const res = await UserLogin(challenge.uuid, authResp);
                 if (!res) throw new Error('Login failed')
             }
@@ -120,7 +120,7 @@ export const UserLoginPage: React.FC = () => {
         >
             <Input
                 size="lg"
-                autoComplete="username webauthn"
+                autoComplete="webauthn"
                 placeholder="Pick a username"
                 onChange={(e) => {
                     updateState({ username: e.target.value });
