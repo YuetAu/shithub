@@ -45,8 +45,7 @@ const Home: React.FC = () => {
         .catch(() => {
           // Error occurred, log out the user
           dispatch({ type: 'LOGOUT' });
-          localStorage.removeItem('AToken');
-          localStorage.removeItem('RToken');
+
         });
     }
   }, []);

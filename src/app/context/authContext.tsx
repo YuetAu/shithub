@@ -29,6 +29,9 @@ export const authReducer = (state: any, action: { type: string; payload?: any })
         case 'LOGIN':
             return { auth: true, user: action.payload };
         case 'LOGOUT':
+            localStorage.removeItem('AToken');
+            localStorage.removeItem('RToken');
+            localStorage.removeItem("auth");
             return { auth: false, user: null };
         case 'SHIT':
             return { ...state, user: { ...state.user, shitCount: action.payload } }

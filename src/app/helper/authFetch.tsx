@@ -36,6 +36,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
         console.error('Error refreshing token:', error);
         localStorage.removeItem('AToken');
         localStorage.removeItem('RToken');
+        localStorage.removeItem("auth");
         return null;
     }
 };

@@ -32,13 +32,3 @@ body {
     transform: rotate(360deg);
   }
 }
-
-@font-face {
-  font-family: "Apple Color Emoji";
-  src: url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.eot");
-  src: url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/5ab304ade0d4f62d027d12464ca69443.svg#Apple Color Emoji")format("svg");
-}
