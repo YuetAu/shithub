@@ -55,7 +55,7 @@ export const UserLoginPage: React.FC = () => {
                 const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
-                const authResp = await startAuthentication(challenge.options, true);
+                const authResp = await startAuthentication(challenge.options);
                 const res = await UserLogin(challenge.uuid, authResp);
                 if (!res) throw new Error('Login failed')
             }
