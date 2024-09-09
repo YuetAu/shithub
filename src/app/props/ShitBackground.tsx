@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Box } from "@chakra-ui/react";
-import { float, flyAcross } from "../styles/keyframes";
+import { holdFloat, flyAcross } from "../styles/keyframes";
 
 interface ShitBackgroundProps {
     containerHeight: number;
@@ -11,14 +11,14 @@ const POOP_COUNT = 10;
 const generateRandomArray = (length: number) =>
     Array.from({ length }, () => [Math.random(), Math.random(), Math.random()]);
 
-const FloatingPoop: React.FC<{ r: number[] }> = ({ r }) => (
+/* const FloatingPoop: React.FC<{ r: number[] }> = ({ r }) => (
     <Box
         position="absolute"
         top={`${r[0] * 100}%`}
         left={`${r[1] * 100}%`}
         fontSize={`${r[2] * 30 + 20}px`}
         opacity="0.3"
-        animation={`${float} ${r[1] * r[2] / r[0] * 3 + 2}s ease-in-out infinite`}
+        animation={`${holdFloat} ${r[1] * r[2] / r[0] * 3 + 2}s ease-in-out infinite`}
         zIndex={2}
         userSelect="none"
     >
@@ -40,7 +40,7 @@ const FlyingPoop: React.FC<{ r: number[], containerHeight: number }> = ({ r, con
     >
         💩
     </Box>
-);
+); */
 
 export const ShitBackground: React.FC<ShitBackgroundProps> = ({ containerHeight }) => {
     const randomArray = useMemo(() => generateRandomArray(POOP_COUNT), []);
@@ -59,13 +59,13 @@ export const ShitBackground: React.FC<ShitBackgroundProps> = ({ containerHeight 
                 zIndex={1}
             />
 
-            {randomArray.map((r, i) => (
+            {/*  {randomArray.map((r, i) => (
                 <FloatingPoop key={`floating-${i}`} r={r} />
             ))}
 
             {randomArray.map((r, i) => (
                 <FlyingPoop key={`flying-${i}`} r={r} containerHeight={containerHeight} />
-            ))}
+            ))} */}
         </>
     );
 };

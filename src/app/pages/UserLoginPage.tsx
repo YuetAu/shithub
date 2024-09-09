@@ -82,10 +82,21 @@ export const UserLoginPage: React.FC = () => {
             const AToken = localStorage.getItem('AToken');
 
             if (userID && AToken) {
+                console.log("Procressing")
                 updateState({ isProcessing: true });
             } else if (userID) {
+                console.log("UserID")
                 updateState({ isLoggingIn: true, allowRegister: false });
-            } else if (state.isLoggingIn) {
+            }
+        };
+
+        checkAuthStatus();
+    }, []);
+
+    useEffect(() => {
+        const stateChangeTrigger = async () => {
+            if (state.isLoggingIn) {
+                console.log("Logging in")
                 await handleAuth();
             } else if (state.isProcessing) {
                 try {
@@ -98,10 +109,10 @@ export const UserLoginPage: React.FC = () => {
                     updateState({ isProcessing: false });
                 }
             }
-        };
+        }
 
-        checkAuthStatus();
-    }, []);
+        stateChangeTrigger()
+    }, [state])
 
     const renderAuthContent = () => (
         <Box
@@ -176,6 +187,15 @@ export const UserLoginPage: React.FC = () => {
                         <Text>Signing in...</Text>
                     </Box>
                 ) : renderAuthContent()}
+                <Box
+                    position={"absolute"}
+                    top="0"
+                    left="0"
+                >
+                    {state.allowRegister ? "True" : "False"}
+                    {state.isLoggingIn ? "True" : "False"}
+                    {state.isProcessing ? "True" : "False"}
+                </Box>
             </Flex>
         </GridItem>
     );
