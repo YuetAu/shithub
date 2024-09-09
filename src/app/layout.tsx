@@ -1,6 +1,7 @@
 import { Providers } from './provider'
 import './styles/globals.css'
 import { Metadata } from 'next'
+import '@fontsource-variable/noto-sans-tc';
 
 
 export const metadata: Metadata = {

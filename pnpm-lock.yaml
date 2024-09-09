@@ -20,6 +20,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.13.0
         version: 11.13.0(@emotion/react@11.13.3(@types/react@18.3.5)(react@18.3.1))(@types/react@18.3.5)(react@18.3.1)
+      '@fontsource-variable/noto-sans-tc':
+        specifier: ^5.0.7
+        version: 5.0.7
       '@simplewebauthn/browser':
         specifier: ^10.0.0
         version: 10.0.0
@@ -1254,6 +1257,9 @@ packages:
   '@eslint/js@8.57.0':
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+
+  '@fontsource-variable/noto-sans-tc@5.0.7':
+    resolution: {integrity: sha512-NWrTiCKuau9hTwlFDxtAV+FTblrR+b6ADv8/6bLxCtHze56Km+4TVTVCMnFgOcExaovGdYO8419aWpIXy8V2Zw==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -4566,6 +4572,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@8.57.0': {}
+
+  '@fontsource-variable/noto-sans-tc@5.0.7': {}
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:

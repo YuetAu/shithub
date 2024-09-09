@@ -4,6 +4,10 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+body {
+  font-family: 'Noto Sans TC Variable', sans-serif;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
@@ -20,6 +24,11 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
