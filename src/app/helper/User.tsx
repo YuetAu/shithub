@@ -4,7 +4,7 @@ import { authFetch } from "./authFetch";
 import { BACKEND_URL } from "../common/const";
 import React, { useContext } from "react";
 
-export const UserRegister = async (username: string, dispatch: any) => {
+export const UserRegister = async (username: string) => {
     username = username.trim();
     if (!username || username.length === 0) {
         alert("Please enter a username");
@@ -68,11 +68,10 @@ export const UserRegister = async (username: string, dispatch: any) => {
     localStorage.setItem("userID", registerData.userID);
     localStorage.setItem("AToken", registerData.AToken);
     localStorage.setItem("RToken", registerData.RToken);
-    dispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
 };
 
-export const UserLogin = async (uuid: string, authResp: any, dispatch: any) => {
+export const UserLogin = async (uuid: string, authResp: any) => {
     const authDispatch = useContext(AuthDispatchContext);
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
@@ -102,7 +101,6 @@ export const UserLogin = async (uuid: string, authResp: any, dispatch: any) => {
     localStorage.setItem("userID", loginData.userID);
     localStorage.setItem("AToken", loginData.AToken);
     localStorage.setItem("RToken", loginData.RToken);
-    dispatch({ type: "LOGIN", payload: await GetUserInfo() });
     return true;
 };
 

@@ -3,7 +3,7 @@ import { Box, Flex, GridItem, Input, Spinner, Text } from '@chakra-ui/react';
 import { startAuthentication, platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from '@tabler/icons-react';
 import { debounce } from 'lodash';
-import { GetLoginChallenge, UserLogin, UserRegister } from '../helper/User';
+import { GetLoginChallenge, GetUserInfo, UserLogin, UserRegister } from '../helper/User';
 import { authFetch } from '../helper/authFetch';
 import { AuthDispatchContext, useAuthDispatch } from '../context/authContext';
 import { BACKEND_URL } from '../common/const';
@@ -49,16 +49,16 @@ export const UserLoginPage: React.FC = () => {
 
         try {
             if (state.allowRegister) {
-                const res = await UserRegister(state.username, authDispatch);
+                const res = await UserRegister(state.username);
                 if (!res) throw new Error('Registration failed');
             } else {
                 const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
                 const authResp = await startAuthentication(challenge.options);
-                await UserLogin(challenge.uuid, authResp, authDispatch);
+                await UserLogin(challenge.uuid, authResp);
             }
-            const userData = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
+            const userData = await GetUserInfo();
             authDispatch({ type: 'LOGIN', payload: userData.user });
             tabSet(1);
         } catch (error) {
@@ -81,6 +81,11 @@ export const UserLoginPage: React.FC = () => {
 
             if (userID && AToken) {
                 updateState({ isProcessing: true });
+            } else if (userID) {
+                updateState({ isLoggingIn: true, allowRegister: false });
+            } else if (state.isLoggingIn) {
+                handleAuth();
+            } else if (state.isProcessing) {
                 try {
                     const res = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
                     authDispatch({ type: 'LOGIN', payload: res.user });
@@ -90,8 +95,6 @@ export const UserLoginPage: React.FC = () => {
                 } finally {
                     updateState({ isProcessing: false });
                 }
-            } else if (userID) {
-                updateState({ isLoggingIn: true, allowRegister: false });
             }
         };
 
