@@ -93,12 +93,13 @@ export const ShitCounter = (props: any) => {
             <GridItem rowSpan={2}>
                 <Flex h={"100%"} justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
                     <Box
-                        shadow={"lg"} rounded={"lg"} px={"1.5em"}
+                        shadow={"lg"} rounded={"lg"} p={"0.5em"}
                         bgColor={"white"}
                         userSelect={"none"}
                         cursor={"pointer"}
                         onClick={handleCounter}
                         zIndex="99"
+                        width={150}
                     >
                         <Image src={"poop.png"} />
                     </Box>
