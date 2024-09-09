@@ -18,3 +18,21 @@ export const useAuthDispatch = () => {
     }
     return dispatch;
 }
+
+export const initialAuth = {
+    auth: false,
+    user: null,
+};
+
+export const authReducer = (state: any, action: { type: string; payload?: any }) => {
+    switch (action.type) {
+        case 'LOGIN':
+            return { auth: true, user: action.payload };
+        case 'LOGOUT':
+            return { auth: false, user: null };
+        case 'SHIT':
+            return { ...state, user: { ...state.user, shitCount: action.payload } }
+        default:
+            return state;
+    }
+};

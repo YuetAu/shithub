@@ -7,6 +7,7 @@ import { GetLoginChallenge, UserLogin, UserRegister } from '../helper/User';
 import { authFetch } from '../helper/authFetch';
 import { AuthDispatchContext, useAuthDispatch } from '../context/authContext';
 import { BACKEND_URL } from '../common/const';
+import { useTabSet } from '../context/tabContext';
 
 export const UserLoginPage: React.FC = () => {
     const [state, setState] = useState({
@@ -21,6 +22,7 @@ export const UserLoginPage: React.FC = () => {
     const userNameInputRef = useRef<HTMLInputElement>(null);
     const checkUsernameIDRef = useRef('');
     const authDispatch = useAuthDispatch();
+    const tabSet = useTabSet();
 
     const updateState = (newState: Partial<typeof state>) => setState(prev => ({ ...prev, ...newState }));
 
@@ -48,7 +50,6 @@ export const UserLoginPage: React.FC = () => {
         try {
             if (state.allowRegister) {
                 const res = await UserRegister(state.username, authDispatch);
-                //if (res) alert('Registration success');
                 if (!res) throw new Error('Registration failed');
             } else {
                 const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
@@ -56,9 +57,10 @@ export const UserLoginPage: React.FC = () => {
                 const challenge = await GetLoginChallenge(userID);
                 const authResp = await startAuthentication(challenge.options);
                 await UserLogin(challenge.uuid, authResp, authDispatch);
-                const userData = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
-                authDispatch({ type: 'LOGIN', payload: userData.user });
             }
+            const userData = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
+            authDispatch({ type: 'LOGIN', payload: userData.user });
+            tabSet(3);
         } catch (error) {
             console.error('Auth error:', error);
             updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true });
@@ -82,6 +84,7 @@ export const UserLoginPage: React.FC = () => {
                 try {
                     const res = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
                     authDispatch({ type: 'LOGIN', payload: res.user });
+                    tabSet(3);
                 } catch (error) {
                     console.error('Auth check error:', error);
                 } finally {

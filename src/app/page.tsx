@@ -2,29 +2,12 @@
 
 import React, { useEffect, useReducer, useState } from "react";
 import { Box } from "@chakra-ui/react";
-import { AuthContext, AuthDispatchContext } from "./context/authContext";
+import { AuthContext, AuthDispatchContext, authReducer, initialAuth } from "./context/authContext";
 import { ShitBackground } from "./props/ShitBackground";
 import { TabSelector } from "./props/TabSelector";
 import { authFetch } from "./helper/authFetch";
 import { BACKEND_URL } from "./common/const";
-
-const initialAuth = {
-  auth: false,
-  user: null,
-};
-
-const authReducer = (state: any, action: { type: string; payload?: any }) => {
-  switch (action.type) {
-    case 'LOGIN':
-      return { auth: true, user: action.payload };
-    case 'LOGOUT':
-      return { auth: false, user: null };
-    case 'SHIT':
-      return { ...state, user: { ...state.user, shitCount: action.payload } }
-    default:
-      return state;
-  }
-};
+import { TabContext, TabSetContext } from "./context/tabContext";
 
 const useContainerHeight = () => {
   const [containerHeight, setContainerHeight] = useState(0);
@@ -79,17 +62,21 @@ const Home: React.FC = () => {
   return (
     <AuthContext.Provider value={auth}>
       <AuthDispatchContext.Provider value={dispatch}>
-        <Box
-          bgColor="#5C3A00"
-          position="relative"
-          overflow="hidden"
-          height={`${containerHeight}px`}
-        >
-          <ShitBackground containerHeight={containerHeight} />
+        <TabContext.Provider value={tab}>
+          <TabSetContext.Provider value={setTab}>
+            <Box
+              bgColor="#5C3A00"
+              position="relative"
+              overflow="hidden"
+              height={`${containerHeight}px`}
+            >
+              <ShitBackground containerHeight={containerHeight} />
 
 
-          <TabSelector tab={tab} setTab={setTab} />
-        </Box>
+              <TabSelector tab={tab} setTab={setTab} />
+            </Box>
+          </TabSetContext.Provider>
+        </TabContext.Provider>
       </AuthDispatchContext.Provider>
     </AuthContext.Provider>
   );
