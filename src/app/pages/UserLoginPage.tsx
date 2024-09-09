@@ -60,7 +60,7 @@ export const UserLoginPage: React.FC = () => {
             }
             const userData = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
             authDispatch({ type: 'LOGIN', payload: userData.user });
-            tabSet(3);
+            tabSet(1);
         } catch (error) {
             console.error('Auth error:', error);
             updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true });
@@ -84,7 +84,7 @@ export const UserLoginPage: React.FC = () => {
                 try {
                     const res = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
                     authDispatch({ type: 'LOGIN', payload: res.user });
-                    tabSet(3);
+                    tabSet(1);
                 } catch (error) {
                     console.error('Auth check error:', error);
                 } finally {
