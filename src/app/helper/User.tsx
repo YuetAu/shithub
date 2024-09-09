@@ -72,7 +72,6 @@ export const UserRegister = async (username: string) => {
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {
-    const authDispatch = useContext(AuthDispatchContext);
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
         headers: {
@@ -105,19 +104,13 @@ export const UserLogin = async (uuid: string, authResp: any) => {
 };
 
 export const GetUserInfo = async () => {
-    const infoResponse = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
-    if (!infoResponse.ok) {
+    console.log("Getting User Info")
+    const infoData = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
+    if (!infoData) {
         console.log("Failed to get user info ERR: FETCH-INFO");
         return false;
     }
-    let infoData;
-    try {
-        infoData = await infoResponse.json();
-    } catch (e) {
-        console.log("Failed to get user info ERR: PARSE-INFO");
-        return false;
-    }
-    if (!infoData || !infoData.success || !infoData.username) {
+    if (!infoData || !infoData.success) {
         console.log("Failed to get user info ERR: INVALID-INFO");
         return false;
     }

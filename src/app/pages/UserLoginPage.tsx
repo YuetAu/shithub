@@ -56,9 +56,11 @@ export const UserLoginPage: React.FC = () => {
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
                 const authResp = await startAuthentication(challenge.options);
-                await UserLogin(challenge.uuid, authResp);
+                const res = await UserLogin(challenge.uuid, authResp);
+                if (!res) throw new Error('Login failed')
             }
             const userData = await GetUserInfo();
+            if (!userData) throw new Error('Unable to fetching from server')
             authDispatch({ type: 'LOGIN', payload: userData.user });
             tabSet(2);
         } catch (error) {
@@ -84,7 +86,7 @@ export const UserLoginPage: React.FC = () => {
             } else if (userID) {
                 updateState({ isLoggingIn: true, allowRegister: false });
             } else if (state.isLoggingIn) {
-                handleAuth();
+                await handleAuth();
             } else if (state.isProcessing) {
                 try {
                     const res = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
