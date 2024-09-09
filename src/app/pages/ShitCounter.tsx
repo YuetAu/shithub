@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, Text, useToast } from "@chakra-ui/react";
+import { Box, Flex, GridItem, Image, Text, useToast } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
@@ -100,7 +100,7 @@ export const ShitCounter = (props: any) => {
                         onClick={handleCounter}
                         zIndex="99"
                     >
-                        <Text textColor={"white"} fontSize={"100"}>💩</Text>
+                        <Image src={"poop.png"} />
                     </Box>
                 </Flex>
             </GridItem>
