@@ -1,10 +1,11 @@
 import { platformAuthenticatorIsAvailable, startRegistration } from "@simplewebauthn/browser";
-import { useAuthDispatch } from "../context/authContext";
+import { AuthDispatchContext } from "../context/authContext";
 import { authFetch } from "./authFetch";
 import { BACKEND_URL } from "../common/const";
+import { useContext } from "react";
 
 export const UserRegister = async (username: string) => {
-    const authDispatch = useAuthDispatch();
+    const authDispatch = useContext(AuthDispatchContext);
     username = username.trim();
     if (!username || username.length === 0) {
         alert("Please enter a username");
@@ -73,7 +74,7 @@ export const UserRegister = async (username: string) => {
 };
 
 export const UserLogin = async (uuid: string, authResp: any) => {
-    const authDispatch = useAuthDispatch();
+    const authDispatch = useContext(AuthDispatchContext);
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
         headers: {

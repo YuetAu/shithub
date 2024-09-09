@@ -61,7 +61,7 @@ export const UserLoginPage: React.FC = () => {
             }
         } catch (error) {
             console.error('Auth error:', error);
-            updateState({ errorText: 'Authentication failed. Please try again.' });
+            updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true });
         } finally {
             updateState({ isProcessing: false });
         }
