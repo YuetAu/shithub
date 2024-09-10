@@ -35,7 +35,7 @@ export const UserLoginPage: React.FC = () => {
         if (!ENGLISH.test(username)) {
             updateState({
                 isInvalid: true,
-                errorText: "Only English Character is accepted",
+                errorText: "Only english character accepted",
                 allowRegister: false,
             });
             return;
