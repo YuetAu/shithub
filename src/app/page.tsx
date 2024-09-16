@@ -64,7 +64,6 @@ const Home: React.FC = () => {
         <TabContext.Provider value={tab}>
           <TabSetContext.Provider value={setTab}>
             <Box
-              bgColor="#5C3A00"
               position="relative"
               overflow="hidden"
               height={`${containerHeight}px`}

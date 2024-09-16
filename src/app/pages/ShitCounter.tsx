@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
 import { useAuth, useAuthDispatch } from "../context/authContext";
+import { PopBox } from "./PopBox";
 
 export const ShitCounter = (props: any) => {
 
@@ -12,6 +13,8 @@ export const ShitCounter = (props: any) => {
     const authDispatch = useAuthDispatch();
 
     const [counter, setCounter] = useState(0);
+
+    const [popBoxOpened, setPopBoxOpened] = useState(false);
 
     const handleCounter = () => {
         const currentTime = Date.now();
@@ -44,6 +47,9 @@ export const ShitCounter = (props: any) => {
                     isClosable: true,
                 });
                 authDispatch({ type: "SHIT", payload: response.count });
+                if (response.lastShit) {
+                    console.log(response.lastShit)
+                }
             } else {
                 toast({
                     title: "唔好意思",
@@ -98,13 +104,16 @@ export const ShitCounter = (props: any) => {
                         userSelect={"none"}
                         cursor={"pointer"}
                         onClick={handleCounter}
-                        zIndex="99"
+                        zIndex="50"
                         width={150}
                     >
                         <Image src={"poop.png"} />
                     </Box>
                 </Flex>
             </GridItem>
+            <PopBox isOpen={popBoxOpened} onClose={() => { setPopBoxOpened(false) }}>
+                <Text color={"white"}>距離上一次屙屎已經有</Text>
+            </PopBox>
         </>
     )
 };

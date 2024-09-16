@@ -3,7 +3,7 @@ import { Box } from "@chakra-ui/react";
 import { holdFloat, flyAcross } from "../styles/keyframes";
 
 interface ShitBackgroundProps {
-    containerHeight: number;
+    containerHeight?: number;
 }
 
 const POOP_COUNT = 10;
@@ -42,7 +42,7 @@ const FlyingPoop: React.FC<{ r: number[], containerHeight: number }> = ({ r, con
     </Box>
 ); */
 
-export const ShitBackground: React.FC<ShitBackgroundProps> = ({ containerHeight }) => {
+export const ShitBackground: React.FC<ShitBackgroundProps> = () => {
     const randomArray = useMemo(() => generateRandomArray(POOP_COUNT), []);
 
     return (
@@ -53,19 +53,29 @@ export const ShitBackground: React.FC<ShitBackgroundProps> = ({ containerHeight 
                 left="0"
                 right="0"
                 bottom="0"
-                opacity="0.1"
-                backgroundImage="url('/poop.svg')"
-                backgroundRepeat="repeat"
-                zIndex={1}
-            />
+                bgColor="#5C3A00"
 
-            {/*  {randomArray.map((r, i) => (
+            >
+                <Box
+                    position="absolute"
+                    top="0"
+                    left="0"
+                    right="0"
+                    bottom="0"
+                    opacity="0.1"
+                    backgroundImage="url('/poop.svg')"
+                    backgroundRepeat="repeat"
+                    zIndex={1}
+                />
+
+                {/*  {randomArray.map((r, i) => (
                 <FloatingPoop key={`floating-${i}`} r={r} />
             ))}
 
             {randomArray.map((r, i) => (
                 <FlyingPoop key={`flying-${i}`} r={r} containerHeight={containerHeight} />
             ))} */}
+            </Box>
         </>
     );
 };

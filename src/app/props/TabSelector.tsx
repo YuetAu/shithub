@@ -54,7 +54,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
             templateRows="repeat(6, 1fr)"
             templateColumns="repeat(1, 1fr)"
             overflow="hidden"
-            zIndex={99}
+            zIndex={50}
         >
             {CurrentTabComponent && <CurrentTabComponent />}
             <GridItem>
@@ -65,7 +65,7 @@ export const TabSelector: React.FC<TabSelectorProps> = ({ tab, setTab }) => {
                     py="2"
                     bgColor="white"
                     userSelect="none"
-                    zIndex={99}
+                    zIndex={50}
                     justifyContent="space-between"
                     width={`calc(100% - 5rem)`}
                     m={"auto"}

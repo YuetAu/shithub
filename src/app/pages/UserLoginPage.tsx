@@ -86,6 +86,7 @@ export const UserLoginPage: React.FC = () => {
             tabSet(2);
         } catch (error) {
             console.error('Auth error:', error);
+            authDispatch({ type: 'LOGOUT' });
             updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true });
         } finally {
             updateState({ isProcessing: false });
@@ -125,6 +126,7 @@ export const UserLoginPage: React.FC = () => {
                     authDispatch({ type: 'LOGIN', payload: res.user });
                     tabSet(2);
                 } catch (error) {
+                    authDispatch({ type: 'LOGOUT' });
                     console.error('Auth check error:', error);
                 } finally {
                     updateState({ isProcessing: false });
@@ -147,7 +149,7 @@ export const UserLoginPage: React.FC = () => {
             flexDirection="column"
             alignItems="center"
             textColor="black"
-            zIndex={99}
+            zIndex={50}
             gap="0.5rem"
         >
             <Input
