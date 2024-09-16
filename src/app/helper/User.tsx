@@ -106,11 +106,12 @@ export const UserLogin = async (token: string, authResp: any) => {
 export const GetUserInfo = async () => {
     console.log("Getting User Info")
     const infoData = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
+    console.log(infoData)
     if (!infoData) {
         console.log("Failed to get user info ERR: FETCH-INFO");
         return false;
     }
-    if (!infoData || !infoData.success) {
+    if (!infoData.success || !infoData.user) {
         console.log("Failed to get user info ERR: INVALID-INFO");
         return false;
     }

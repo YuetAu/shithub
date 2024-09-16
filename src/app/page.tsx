@@ -34,9 +34,10 @@ const Home: React.FC = () => {
       // Validate the token
       authFetch(`${BACKEND_URL}/user/me`, 'GET')
         .then(response => {
-          if (response) {
+          if (response && response.success) {
             dispatch({ type: 'LOGIN', payload: response.user });
           } else {
+            dispatch({ type: 'LOGOUT' });
             throw new Error('Invalid token');
           }
         })
