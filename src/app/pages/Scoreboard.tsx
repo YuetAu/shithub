@@ -67,6 +67,8 @@ export const ScoreboardPage = () => {
                     bg="rgba(255, 255, 255, 0.8)"
                     backdropFilter="blur(10px)"
                     p={6}
+                    height={"90%"}
+                    overflowX={"visible"}
                     borderRadius="lg"
                     boxShadow="xl"
                     position="relative"
@@ -75,34 +77,44 @@ export const ScoreboardPage = () => {
                     <Heading as="h1" size="xl" textAlign="center" letterSpacing="wider" mb={4} color="brown.800">
                         💩 屎屎龍虎榜 💩
                     </Heading>
-                    {sortedScores.map((score, index) => (
-                        <Flex
-                            key={score.userName}
-                            justify="space-between"
-                            align="center"
-                            bg={index === 0 ? "yellow.100" : index === 1 ? "gray.100" : index === 2 ? "orange.100" : "white"}
-                            p={4}
-                            borderRadius="md"
-                            boxShadow="md"
-                            transition="transform 0.2s, box-shadow 0.2s"
-                            _hover={{ transform: "scale(1.02)", boxShadow: "lg" }}
-                        >
-                            <Box display="flex" alignItems="center">
-                                <Text fontSize="2xl" fontWeight="bold" mr={2} color="brown.500">
-                                    {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`}
-                                </Text>
-                                <Text fontSize="lg" fontWeight="bold" color="brown.800" noOfLines={1}>
-                                    {score.displayName || score.userName}
-                                </Text>
-                            </Box>
-                            <Box display="flex" alignItems="center">
-                                <Text fontSize="2xl" fontWeight="bold" color="brown.600" mr={2}>
-                                    {score.shitCount}
-                                </Text>
-                                <Text fontSize="2xl">💩</Text>
-                            </Box>
-                        </Flex>
-                    ))}
+                    <Box
+                        overflowY="auto"
+                        flex="1"
+                        style={{
+                            scrollbarWidth: "none",
+                            scrollbarColor: "transparent transparent",
+                        }}
+                    >
+                        {sortedScores.map((score, index) => (
+                            <Flex
+                                key={score.userName}
+                                justify="space-between"
+                                align="center"
+                                bg={index === 0 ? "yellow.100" : index === 1 ? "gray.100" : index === 2 ? "orange.100" : "white"}
+                                p={4}
+                                borderRadius="md"
+                                boxShadow="md"
+                                mb={2}
+                                transition="transform 0.2s, box-shadow 0.2s"
+                                _hover={{ transform: "scale(0.98)", boxShadow: "lg" }}
+                            >
+                                <Box display="flex" alignItems="center">
+                                    <Text fontSize="2xl" fontWeight="bold" mr={2} color="brown.500">
+                                        {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`}
+                                    </Text>
+                                    <Text fontSize="lg" fontWeight="bold" color="brown.800" noOfLines={1}>
+                                        {score.displayName || score.userName}
+                                    </Text>
+                                </Box>
+                                <Box display="flex" alignItems="center">
+                                    <Text fontSize="2xl" fontWeight="bold" color="brown.600" mr={2}>
+                                        {score.shitCount}
+                                    </Text>
+                                    <Text fontSize="2xl">💩</Text>
+                                </Box>
+                            </Flex>
+                        ))}
+                    </Box>
                 </VStack>
             </Flex>
         </GridItem>
