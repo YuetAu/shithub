@@ -37,7 +37,6 @@ const Home: React.FC = () => {
           if (response && response.success) {
             dispatch({ type: 'LOGIN', payload: response.user });
           } else {
-            dispatch({ type: 'LOGOUT' });
             throw new Error('Invalid token');
           }
         })

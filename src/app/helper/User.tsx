@@ -39,7 +39,7 @@ export const UserRegister = async (username: string) => {
         return false;
     }
     const passkeyRes = await startRegistration(challengeData.options);
-    const registerResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/register`, {
+    const registerResponse = await fetch(`${BACKEND_URL}/user/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const UserRegister = async (username: string) => {
 };
 
 export const UserLogin = async (token: string, authResp: any) => {
-    const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
+    const loginResponse = await fetch(`${BACKEND_URL}/user/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export const UserLogin = async (token: string, authResp: any) => {
 
 export const GetUserInfo = async () => {
     console.log("Getting User Info")
-    const infoData = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
+    const infoData = await authFetch(`${BACKEND_URL}/user/me`, "GET");
     if (!infoData) {
         console.log("Failed to get user info ERR: FETCH-INFO");
         return false;
@@ -118,7 +118,7 @@ export const GetUserInfo = async () => {
 
 
 export const GetLoginChallenge = async () => {
-    const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login-challenge`, {
+    const challengeResponse = await fetch(`${BACKEND_URL}/user/login-challenge`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
