@@ -87,7 +87,7 @@ export const UserLoginPage: React.FC = () => {
         } catch (error) {
             console.error('Auth error:', error);
             authDispatch({ type: 'LOGOUT' });
-            updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true });
+            updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true, isLoggingIn: false });
         } finally {
             updateState({ isProcessing: false });
         }
@@ -205,6 +205,7 @@ export const UserLoginPage: React.FC = () => {
                         alignItems="center"
                         textColor="black"
                         gap="0.5rem"
+                        zIndex={50}
                     >
                         <Spinner size="md" ml="0.5rem" />
                         <Text>Signing in...</Text>

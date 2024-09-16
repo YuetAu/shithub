@@ -37,6 +37,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
         localStorage.removeItem('AToken');
         localStorage.removeItem('RToken');
         localStorage.removeItem("auth");
+        localStorage.removeItem("userID");
         return null;
     }
 };
