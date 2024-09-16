@@ -86,7 +86,6 @@ export const UserLoginPage: React.FC = () => {
             tabSet(2);
         } catch (error) {
             console.error('Auth error:', error);
-            authDispatch({ type: 'LOGOUT' });
             updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true, isLoggingIn: false });
         } finally {
             updateState({ isProcessing: false });
@@ -123,6 +122,7 @@ export const UserLoginPage: React.FC = () => {
             } else if (state.isProcessing) {
                 try {
                     const res = await authFetch(`${BACKEND_URL}/user/me`, 'GET');
+                    if (!res) throw new Error('Invalid token');
                     authDispatch({ type: 'LOGIN', payload: res.user });
                     tabSet(2);
                 } catch (error) {

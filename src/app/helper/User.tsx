@@ -140,7 +140,7 @@ export const GetLoginChallenge = async (userID: string) => {
         console.log("Failed to get login challenge ERR: PARSE-CHALLENGE");
         return false;
     }
-    if (!challengeData || !challengeData.success || !challengeData.options || !challengeData.uuid) {
+    if (!challengeData || !challengeData.success || !challengeData.options || !challengeData.token) {
         console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
         return false;
     }
