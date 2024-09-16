@@ -77,7 +77,7 @@ export const UserLoginPage: React.FC = () => {
                 if (!userID) throw new Error('No userID found');
                 const challenge = await GetLoginChallenge(userID);
                 const authResp = await startAuthentication(challenge.options);
-                const res = await UserLogin(challenge.uuid, authResp);
+                const res = await UserLogin(challenge.token, authResp);
                 if (!res) throw new Error('Login failed')
             }
             const userData = await GetUserInfo();

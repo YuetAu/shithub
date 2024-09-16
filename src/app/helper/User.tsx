@@ -45,7 +45,7 @@ export const UserRegister = async (username: string) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            uuid: challengeData.uuid,
+            token: challengeData.token,
             passkeyResponse: passkeyRes,
         }),
     });
@@ -71,14 +71,14 @@ export const UserRegister = async (username: string) => {
     return true;
 };
 
-export const UserLogin = async (uuid: string, authResp: any) => {
+export const UserLogin = async (token: string, authResp: any) => {
     const loginResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            uuid: uuid,
+            token: token,
             response: authResp,
         }),
     });
