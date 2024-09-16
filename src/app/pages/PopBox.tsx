@@ -41,7 +41,7 @@ export const PopBox = (props: any) => {
                 opacity={isContentVisible ? 1 : 0}
                 transition="opacity 1s ease"
             >
-                Close
+                關閉
             </Button>
             <Box
                 position="absolute"

@@ -17,6 +17,7 @@ export const ShitCounter = (props: any) => {
 
     const [popBoxOpened, setPopBoxOpened] = useState(false);
     const [lastShitTime, setLastShitTime] = useState("");
+    const [lastRandomShitTime, setLastRandomShitTime] = useState("");
 
     const handleCounter = () => {
         const currentTime = Date.now();
@@ -56,8 +57,13 @@ export const ShitCounter = (props: any) => {
                     let hh = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
                     let dd = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
                     setLastShitTime(`${dd} 日 ${hh} 鐘頭 \n ${mm} 分鐘 ${ss} 秒`);
-                    setPopBoxOpened(true);
                 }
+                if (response.lastRandomShit) {
+                    const timeDiff = Date.now() - response.lastRandomShit;
+                    let hh = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
+                    setLastRandomShitTime(`${hh} 鐘頭`);
+                }
+                (response.lastShit || response.lastRandomShit) && setPopBoxOpened(true);
             } else {
                 toast({
                     title: "唔好意思",
@@ -157,6 +163,15 @@ export const ShitCounter = (props: any) => {
                         fontStyle="italic"
                     >
                         要記得多飲水啊！
+                    </Text>
+
+                    <Text
+                        color="yellow.500"
+                        fontSize="md"
+                        py="10"
+                        fontStyle="italic"
+                    >
+                        有人喺{lastRandomShitTime}前屙完屎嚟
                     </Text>
                 </VStack>
             </PopBox>
