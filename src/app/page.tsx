@@ -15,8 +15,6 @@ const useContainerHeight = () => {
   useEffect(() => {
     const handleResize = () => setContainerHeight(window.innerHeight);
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return containerHeight;

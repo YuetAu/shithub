@@ -1,9 +1,10 @@
-import { Box, Flex, GridItem, Image, Text, useToast } from "@chakra-ui/react";
+import { Box, Flex, GridItem, Image, Text, useToast, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
 import { useAuth, useAuthDispatch } from "../context/authContext";
 import { PopBox } from "./PopBox";
+import { IconPooFilled } from "@tabler/icons-react";
 
 export const ShitCounter = (props: any) => {
 
@@ -14,7 +15,8 @@ export const ShitCounter = (props: any) => {
 
     const [counter, setCounter] = useState(0);
 
-    const [popBoxOpened, setPopBoxOpened] = useState(false);
+    const [popBoxOpened, setPopBoxOpened] = useState(true);
+    const [lastShitTime, setLastShitTime] = useState("10 日 12 鐘頭 \n 60 分鐘 59 秒");
 
     const handleCounter = () => {
         const currentTime = Date.now();
@@ -48,7 +50,13 @@ export const ShitCounter = (props: any) => {
                 });
                 authDispatch({ type: "SHIT", payload: response.count });
                 if (response.lastShit) {
-                    console.log(response.lastShit)
+                    const timeDiff = Date.now() - response.lastShit;
+                    let ss = Math.floor(timeDiff / 1000) % 60;
+                    let mm = Math.floor(timeDiff / 1000 / 60) % 60;
+                    let hh = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
+                    let dd = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
+                    setLastShitTime(`${dd} 日 ${hh} 鐘頭 \n ${mm} 分鐘 ${ss} 秒`);
+                    setPopBoxOpened(true);
                 }
             } else {
                 toast({
@@ -111,8 +119,46 @@ export const ShitCounter = (props: any) => {
                     </Box>
                 </Flex>
             </GridItem>
-            <PopBox isOpen={popBoxOpened} onClose={() => { setPopBoxOpened(false) }}>
-                <Text color={"white"}>距離上一次屙屎已經有</Text>
+            <PopBox isOpen={popBoxOpened} onClose={() => setPopBoxOpened(false)}>
+                <VStack
+                    spacing={4}
+                    align="center"
+                    justify="center"
+                    p={8}
+                >
+                    <IconPooFilled color="white" size={50} />
+                    <Text
+                        color="white"
+                        fontSize="xl"
+                        fontWeight="bold"
+                        textAlign="center"
+                    >
+                        距離上一次屙屎已經有
+                    </Text>
+                    <Box
+                        bg="white"
+                        borderRadius="full"
+                        px={6}
+                        py={3}
+                        boxShadow="md"
+                    >
+                        <Text
+                            color="#5C3A00"
+                            fontSize="4xl"
+                            fontWeight="extrabold"
+                            whiteSpace="pre-line"
+                        >
+                            {lastShitTime}
+                        </Text>
+                    </Box>
+                    <Text
+                        color="yellow.200"
+                        fontSize="lg"
+                        fontStyle="italic"
+                    >
+                        要記得多飲水啊！
+                    </Text>
+                </VStack>
             </PopBox>
         </>
     )
