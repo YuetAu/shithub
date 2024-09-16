@@ -16,7 +16,7 @@ export const UserLoginPage: React.FC = () => {
         username: '',
         isInvalid: false,
         errorText: '',
-        allowRegister: true,
+        allowRegister: false,
         isProcessing: false,
         isLoggingIn: false,
         isLocked: false
@@ -30,7 +30,11 @@ export const UserLoginPage: React.FC = () => {
     const updateState = (newState: Partial<typeof state>) => setState(prev => ({ ...prev, ...newState }));
 
     const checkUsername = debounce(async (username: string) => {
-        if (!username) return;
+        if (!username) {
+            updateState({
+                allowRegister: false,
+            });
+        }
         updateState({ isLocked: true })
         if (!ENGLISH.test(username)) {
             updateState({
@@ -73,9 +77,7 @@ export const UserLoginPage: React.FC = () => {
                 const res = await UserRegister(state.username);
                 if (!res) throw new Error('Registration failed');
             } else {
-                const userID = checkUsernameIDRef.current || localStorage.getItem('userID');
-                if (!userID) throw new Error('No userID found');
-                const challenge = await GetLoginChallenge(userID);
+                const challenge = await GetLoginChallenge();
                 const authResp = await startAuthentication(challenge.options);
                 const res = await UserLogin(challenge.token, authResp);
                 if (!res) throw new Error('Login failed')

@@ -49,7 +49,6 @@ export const UserRegister = async (username: string) => {
             passkeyResponse: passkeyRes,
         }),
     });
-    console.log("Passkey response: ", passkeyRes);
     if (!registerResponse.ok) {
         console.log("Failed to register ERR: FETCH-REGISTER");
         return false;
@@ -106,7 +105,6 @@ export const UserLogin = async (token: string, authResp: any) => {
 export const GetUserInfo = async () => {
     console.log("Getting User Info")
     const infoData = await authFetch(`https://shithub-backend.yuetau.workers.dev/user/me`, "GET");
-    console.log(infoData)
     if (!infoData) {
         console.log("Failed to get user info ERR: FETCH-INFO");
         return false;
@@ -119,15 +117,13 @@ export const GetUserInfo = async () => {
 }
 
 
-export const GetLoginChallenge = async (userID: string) => {
+export const GetLoginChallenge = async () => {
     const challengeResponse = await fetch(`https://shithub-backend.yuetau.workers.dev/user/login-challenge`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            userID: userID,
-        }),
+        body: JSON.stringify({}),
     });
     if (!challengeResponse.ok) {
         console.log("Failed to get login challenge ERR: FETCH-CHALLENGE");
@@ -144,6 +140,5 @@ export const GetLoginChallenge = async (userID: string) => {
         console.log("Failed to get login challenge ERR: INVALID-CHALLENGE");
         return false;
     }
-    console.log("Challenge data: ", challengeData);
     return challengeData;
 };
