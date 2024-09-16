@@ -84,7 +84,8 @@ export const ShitCounter = (props: any) => {
     useEffect(() => {
         if (auth.auth && auth.user && auth.user.shitCount) {
             setCounter(auth.user.shitCount || 0);
-        } else if (!auth.auth) {
+        } else {
+            authDispatch({ type: "LOGOUT" });
             const unAuthedShit = localStorage.getItem("unAuthedShit");
             if (unAuthedShit) {
                 setCounter(parseInt(unAuthedShit));
