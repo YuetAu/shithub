@@ -15,8 +15,8 @@ export const ShitCounter = (props: any) => {
 
     const [counter, setCounter] = useState(0);
 
-    const [popBoxOpened, setPopBoxOpened] = useState(true);
-    const [lastShitTime, setLastShitTime] = useState("10 日 12 鐘頭 \n 60 分鐘 59 秒");
+    const [popBoxOpened, setPopBoxOpened] = useState(false);
+    const [lastShitTime, setLastShitTime] = useState("");
 
     const handleCounter = () => {
         const currentTime = Date.now();
