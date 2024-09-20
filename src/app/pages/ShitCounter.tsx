@@ -70,6 +70,20 @@ export const ShitCounter = (props: any) => {
                 }
                 (response.lastShit) && setPopBoxOpened(true);
             } else {
+                setCounter(newCounter - 1);
+                if (response.reason) {
+                    switch (response.reason) {
+                        case 1:
+                            toast({
+                                title: "你屙得太快啦",
+                                description: "休息一下再試吓啦",
+                                status: "error",
+                                duration: 2000,
+                                isClosable: true,
+                            });
+                            return;
+                    }
+                }
                 toast({
                     title: "唔好意思",
                     description: "屙唔到",
