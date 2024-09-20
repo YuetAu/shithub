@@ -37,7 +37,7 @@ export const UserInfoPage = () => {
                 });
             } else {
                 toast({
-                    title: "唔好意思",
+                    title: "唔好意思👷😢",
                     description: "更新名稱失敗",
                     status: "error",
                     duration: 2000,

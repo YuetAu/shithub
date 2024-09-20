@@ -24,7 +24,7 @@ export const ShitCounter = (props: any) => {
     const handleCounter = () => {
         const currentTime = Date.now();
         const lastTime = localStorage.getItem("lastTime");
-        if (lastTime) {
+        if (lastTime && location.hostname !== "localhost") {
             const diff = currentTime - parseInt(lastTime);
             if (diff < 1000 * 60 * 30) {
                 toast({
@@ -68,7 +68,7 @@ export const ShitCounter = (props: any) => {
                     console.log(timeDiff, hh, mm)
                     setLastRandomShitTime(hh > 0 ? `${hh} 鐘頭` : `${mm} 分鐘`);
                 }
-                (response.lastShit) && setPopBoxOpened(true);
+                setPopBoxOpened(true);
             } else {
                 setCounter(newCounter - 1);
                 if (response.reason) {
@@ -85,7 +85,7 @@ export const ShitCounter = (props: any) => {
                     }
                 }
                 toast({
-                    title: "唔好意思",
+                    title: "唔好意思👷😢",
                     description: "屙唔到",
                     status: "error",
                     duration: 2000,
@@ -145,7 +145,7 @@ export const ShitCounter = (props: any) => {
                 </Flex>
             </GridItem>
             <PopBox isOpen={popBoxOpened} onClose={() => setPopBoxOpened(false)}>
-                <Survey lastShitTime={lastShitTime} lastRandomShitTime={lastRandomShitTime} newShitIDRef={newShitIDRef} />
+                <Survey isOpen={popBoxOpened} setOpen={setPopBoxOpened} lastShitTime={lastShitTime} lastRandomShitTime={lastRandomShitTime} newShitIDRef={newShitIDRef} />
             </PopBox>
         </>
     )
