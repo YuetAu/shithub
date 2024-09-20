@@ -76,7 +76,7 @@ export const ScoreboardPage = () => {
                 >
                     <Heading as="h1" size="xl" textAlign="center" letterSpacing="wider" mb={2} color="brown.800">
                         💩 屎屎龍虎榜 💩
-                        <Text fontSize={"sm"} mt={1}>只計算當月屎屎</Text>
+                        <Text fontSize={"sm"} mt={1}>只統計當月屎屎</Text>
                     </Heading>
 
                     <Box
