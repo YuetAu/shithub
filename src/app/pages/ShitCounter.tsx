@@ -5,6 +5,7 @@ import { BACKEND_URL } from "../common/const";
 import { useAuth, useAuthDispatch } from "../context/authContext";
 import { PopBox } from "./PopBox";
 import { IconPooFilled } from "@tabler/icons-react";
+import { Survey } from "./Survey";
 
 export const ShitCounter = (props: any) => {
 
@@ -18,6 +19,7 @@ export const ShitCounter = (props: any) => {
     const [popBoxOpened, setPopBoxOpened] = useState(false);
     const [lastShitTime, setLastShitTime] = useState("");
     const [lastRandomShitTime, setLastRandomShitTime] = useState("");
+    const newShitIDRef = React.useRef<string>("");
 
     const handleCounter = () => {
         const currentTime = Date.now();
@@ -49,6 +51,7 @@ export const ShitCounter = (props: any) => {
                     duration: 2000,
                     isClosable: true,
                 });
+                newShitIDRef.current = response.shitID;
                 authDispatch({ type: "SHIT", payload: response.count });
                 if (response.lastShit) {
                     const timeDiff = Date.now() - response.lastShit;
@@ -56,14 +59,16 @@ export const ShitCounter = (props: any) => {
                     let mm = Math.floor(timeDiff / 1000 / 60) % 60;
                     let hh = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
                     let dd = Math.floor(timeDiff / 1000 / 60 / 60 / 24);
-                    setLastShitTime(`${dd} 日 ${hh} 鐘頭 \n ${mm} 分鐘 ${ss} 秒`);
+                    setLastShitTime(`${dd > 0 ? `${dd} 日` : ""} ${hh} 鐘頭 \n ${mm} 分鐘 ${ss} 秒`);
                 }
                 if (response.lastRandomShit) {
                     const timeDiff = Date.now() - response.lastRandomShit;
-                    let hh = Math.floor(timeDiff / 1000 / 60 / 60) % 24;
-                    setLastRandomShitTime(`${hh} 鐘頭`);
+                    let hh = Math.floor(timeDiff / 1000 / 60 / 60);
+                    let mm = Math.ceil(timeDiff / 1000 / 60);
+                    console.log(timeDiff, hh, mm)
+                    setLastRandomShitTime(hh > 0 ? `${hh} 鐘頭` : `${mm} 分鐘`);
                 }
-                (response.lastShit || response.lastRandomShit) && setPopBoxOpened(true);
+                (response.lastShit) && setPopBoxOpened(true);
             } else {
                 toast({
                     title: "唔好意思",
@@ -126,54 +131,7 @@ export const ShitCounter = (props: any) => {
                 </Flex>
             </GridItem>
             <PopBox isOpen={popBoxOpened} onClose={() => setPopBoxOpened(false)}>
-                <VStack
-                    spacing={4}
-                    align="center"
-                    justify="center"
-                    p={8}
-                >
-                    <IconPooFilled color="white" size={50} />
-                    <Text
-                        color="white"
-                        fontSize="xl"
-                        fontWeight="bold"
-                        textAlign="center"
-                    >
-                        距離上一次屙屎已經有
-                    </Text>
-                    <Box
-                        bg="white"
-                        borderRadius="full"
-                        px={6}
-                        py={3}
-                        boxShadow="md"
-                    >
-                        <Text
-                            color="#5C3A00"
-                            fontSize="4xl"
-                            fontWeight="extrabold"
-                            whiteSpace="pre-line"
-                        >
-                            {lastShitTime}
-                        </Text>
-                    </Box>
-                    <Text
-                        color="yellow.200"
-                        fontSize="lg"
-                        fontStyle="italic"
-                    >
-                        要記得多飲水啊！
-                    </Text>
-
-                    <Text
-                        color="yellow.500"
-                        fontSize="md"
-                        py="10"
-                        fontStyle="italic"
-                    >
-                        有人喺{lastRandomShitTime}前屙完屎嚟
-                    </Text>
-                </VStack>
+                <Survey lastShitTime={lastShitTime} lastRandomShitTime={lastRandomShitTime} newShitIDRef={newShitIDRef} />
             </PopBox>
         </>
     )
