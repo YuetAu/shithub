@@ -115,7 +115,7 @@ export const ScoreboardPage = () => {
                                         </Text> */}
                                     </VStack>
                                 </Flex>
-                                <Flex align="center" justify="flex-end" minWidth="100px">
+                                <Flex align="center" justify="flex-end" ml={2}>
                                     <VStack spacing={1} align="end">
                                         <Flex align="center">
                                             <Text fontSize="lg" fontWeight="bold" color="brown.600" mr={1}>
