@@ -122,13 +122,13 @@ export const ScoreboardPage = () => {
                                             <Text fontSize="lg" fontWeight="bold" color="brown.600" mr={1}>
                                                 {score.shitCount}
                                             </Text>
-                                            <Text fontSize="lg" className="golden-poop">💩</Text>
+                                            <Text fontSize="lg" display={"inline-block"}>💩</Text>
                                         </Flex>
                                         <Flex align="center">
                                             <Text fontSize="sm" fontWeight="bold" color="orange.500" mr={1}>
                                                 {score.superShitCount || 0}
                                             </Text>
-                                            <Text fontSize="sm" className="super-poop">💩</Text>
+                                            <Text fontSize="sm" className="golden-poop">💩</Text>
                                         </Flex>
                                     </VStack>
                                 </Flex>
