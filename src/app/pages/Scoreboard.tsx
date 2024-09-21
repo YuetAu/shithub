@@ -75,7 +75,6 @@ export const ScoreboardPage = () => {
                     position="relative"
                     zIndex={10}
                     width="100%"
-                    maxWidth="600px"
                 >
                     <Heading as="h1" size="xl" textAlign="center" letterSpacing="wider" mb={2} color="brown.800">
                         💩 屎屎龍虎榜 💩
@@ -108,7 +107,7 @@ export const ScoreboardPage = () => {
                                         {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`}
                                     </Text>
                                     <VStack align="start" spacing={0}>
-                                        <Text fontSize="xl" fontWeight="bold" color="brown.800" noOfLines={1}>
+                                        <Text fontSize="xl" fontWeight="bold" color="brown.800" noOfLines={1} textAlign={"start"}>
                                             {score.displayName || score.userName}
                                         </Text>
                                         {/* <Text fontSize="sm" color="gray.600">
