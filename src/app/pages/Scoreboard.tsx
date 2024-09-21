@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { GridItem, VStack, Heading, Box, Text, Flex, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
+import { GridItem, VStack, Heading, Box, Text, Flex, Spinner, Alert, AlertIcon, HStack } from "@chakra-ui/react";
 import { authFetch } from '../helper/authFetch';
 import { BACKEND_URL } from '../common/const';
 
 type ScoreboardItem = {
     shitCount: number;
+    superShitCount: number;
     userName: string;
     displayName: string;
 }
@@ -73,18 +74,20 @@ export const ScoreboardPage = () => {
                     boxShadow="xl"
                     position="relative"
                     zIndex={10}
+                    width="100%"
+                    maxWidth="600px"
                 >
                     <Heading as="h1" size="xl" textAlign="center" letterSpacing="wider" mb={2} color="brown.800">
                         💩 屎屎龍虎榜 💩
-                        <Text fontSize={"sm"} mt={1}>只統計當月屎屎</Text>
+                        <Text fontSize={"sm"} mt={1} color="gray.600">只統計當月屎屎</Text>
                     </Heading>
 
                     <Box
                         overflowY="auto"
                         flex="1"
                         style={{
-                            scrollbarWidth: "none",
-                            scrollbarColor: "transparent transparent",
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(0,0,0,0.1) transparent",
                         }}
                     >
                         {sortedScores.map((score, index) => (
@@ -96,24 +99,39 @@ export const ScoreboardPage = () => {
                                 p={4}
                                 borderRadius="md"
                                 boxShadow="md"
-                                mb={2}
+                                mb={3}
                                 transition="transform 0.2s, box-shadow 0.2s"
-                                _hover={{ transform: "scale(0.98)", boxShadow: "lg" }}
+                                _hover={{ transform: "translateY(-2px)", boxShadow: "lg" }}
                             >
-                                <Box display="flex" alignItems="center">
-                                    <Text fontSize="2xl" fontWeight="bold" mr={2} color="brown.500">
+                                <Flex align="center" flex={1}>
+                                    <Text fontSize="2xl" fontWeight="bold" mr={3} color={index < 3 ? "gold" : "gray.400"}>
                                         {index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : `${index + 1}.`}
                                     </Text>
-                                    <Text fontSize="lg" fontWeight="bold" color="brown.800" noOfLines={1}>
-                                        {score.displayName || score.userName}
-                                    </Text>
-                                </Box>
-                                <Box display="flex" alignItems="center">
-                                    <Text fontSize="2xl" fontWeight="bold" color="brown.600" mr={2}>
-                                        {score.shitCount}
-                                    </Text>
-                                    <Text fontSize="2xl">💩</Text>
-                                </Box>
+                                    <VStack align="start" spacing={0}>
+                                        <Text fontSize="xl" fontWeight="bold" color="brown.800" noOfLines={1}>
+                                            {score.displayName || score.userName}
+                                        </Text>
+                                        {/* <Text fontSize="sm" color="gray.600">
+                                            @{score.userName}
+                                        </Text> */}
+                                    </VStack>
+                                </Flex>
+                                <Flex align="center" justify="flex-end" minWidth="100px">
+                                    <VStack spacing={1} align="end">
+                                        <Flex align="center">
+                                            <Text fontSize="lg" fontWeight="bold" color="brown.600" mr={1}>
+                                                {score.shitCount}
+                                            </Text>
+                                            <Text fontSize="lg" className="golden-poop">💩</Text>
+                                        </Flex>
+                                        <Flex align="center">
+                                            <Text fontSize="sm" fontWeight="bold" color="orange.500" mr={1}>
+                                                {score.superShitCount || 0}
+                                            </Text>
+                                            <Text fontSize="sm" className="super-poop">💩</Text>
+                                        </Flex>
+                                    </VStack>
+                                </Flex>
                             </Flex>
                         ))}
                     </Box>

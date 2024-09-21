@@ -32,3 +32,23 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.golden-poop {
+  position: relative;
+  display: inline-block;
+}
+
+.golden-poop::after {
+  content: "💩";
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: 
+    brightness(0.9)
+    contrast(1.1)
+    saturate(1.3)
+    sepia(1.5)
+    hue-rotate(5deg);
+  mix-blend-mode: color-dodge;
+  opacity: 0.8;
+}
