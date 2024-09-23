@@ -13,7 +13,8 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@fontsource-variable/noto-sans-tc": "^5.0.7",
+    "@fontsource-variable/noto-sans-tc": "^5.1.0",
+    "@serwist/next": "^9.0.8",
     "@simplewebauthn/browser": "^10.0.0",
     "@tabler/icons-react": "^3.14.0",
     "@types/lodash": "^4.17.7",
@@ -23,9 +24,11 @@
     "lucide-react": "^0.438.0",
     "next": "14.2.10",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "serwist": "^9.0.8"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
