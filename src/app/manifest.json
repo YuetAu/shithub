@@ -10,7 +10,7 @@
     ],
     "theme_color": "#FFFFFF",
     "background_color": "#FFFFFF",
-    "start_url": "/dashboard",
+    "start_url": "/",
     "display": "standalone",
     "orientation": "landscape"
   }
