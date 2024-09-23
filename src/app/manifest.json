@@ -3,7 +3,7 @@
     "short_name": "ShitHub",
     "icons": [
       {
-        "src": "/logo/poop.png",
+        "src": "/poop.png",
         "sizes": "512x512",
         "type": "image/png"
       }

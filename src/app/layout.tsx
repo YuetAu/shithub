@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: APP_DEFAULT_TITLE,
     startupImage: [
       {
-        url: "/logo/poop.png",
+        url: "/poop.png",
       },
     ],
   },
@@ -46,8 +46,8 @@ export const metadata: Metadata = {
     description: APP_DESCRIPTION,
   },
   icons: {
-    icon: '/logo/poop.png',
-    apple: '/logo/poop.png',
+    icon: '/poop.png',
+    apple: '/poop.png',
   },
 };
 
