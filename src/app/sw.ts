@@ -67,7 +67,7 @@ self.addEventListener("notificationclick", function (event) {
         },
         body: JSON.stringify({
             pushKey: event.notification.data.pushKey || "default",
-            receivedAt: Date.now(),
+            openedAt: Date.now(),
         }),
     }));
 });
