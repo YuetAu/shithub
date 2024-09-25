@@ -34,9 +34,6 @@ export const UserInfoPage = () => {
         navigator.serviceWorker.ready.then(async (registration) => {
             const sub = await registration.pushManager.getSubscription();
             setWebpushRegistered(!!sub);
-            registration.update().then(() => {
-                console.log("Service worker updated");
-            });
         });
     });
 
