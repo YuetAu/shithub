@@ -31,17 +31,23 @@ self.addEventListener("push", function (event) {
     if (event.data) {
         const data = event.data.json();
         const options = {
-            body: data.body,
+            body: data.body || "Checking in on you!",
             icon: data.icon || "/poop.png",
-            badge: "/poop-small.png",
-            vibrate: [100, 50, 100],
+            badge: data.badge || "/poop-small.png",
+            vibrate: data.vibrate || [100, 50, 100],
+            tag: data.tag || "default",
+            silent: data.silent || false,
             data: {
+                url: data.url || "https://shithub.xyz",
                 dateOfArrival: Date.now(),
                 pushKey: data.pushKey || "default",
             },
         };
         event.waitUntil(
-            self.registration.showNotification(data.title, options),
+            self.registration.showNotification(
+                data.title || "ShitHub",
+                options,
+            ),
         );
         event.waitUntil(fetch(`${BACKEND_URL}/webpush/received`, {
             method: "post",
@@ -59,7 +65,7 @@ self.addEventListener("push", function (event) {
 self.addEventListener("notificationclick", function (event) {
     console.log("[Service Worker] Notification click Received.");
     event.notification.close();
-    event.waitUntil(this.clients.openWindow("https://shithub.xyz"));
+    event.waitUntil(this.clients.openWindow(event.notification.data.url));
     event.waitUntil(fetch(`${BACKEND_URL}/webpush/opened`, {
         method: "post",
         headers: {
