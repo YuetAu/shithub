@@ -46,7 +46,14 @@ const Home: React.FC = () => {
 
         });
     }
+
+    navigator.serviceWorker.ready.then(async (registration) => {
+      registration.update().then(() => {
+        console.log("Service worker updated");
+      });
+    });
   }, []);
+
 
   useEffect(() => {
     if (auth.auth) {
