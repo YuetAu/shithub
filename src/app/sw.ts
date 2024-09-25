@@ -59,7 +59,7 @@ self.addEventListener("push", function (event) {
 self.addEventListener("notificationclick", function (event) {
     console.log("[Service Worker] Notification click Received.");
     event.notification.close();
-    event.waitUntil(this.clients.openWindow("<https://shithub.xyz>"));
+    event.waitUntil(this.clients.openWindow("https://shithub.xyz"));
     event.waitUntil(fetch(`${BACKEND_URL}/webpush/opened`, {
         method: "post",
         headers: {
