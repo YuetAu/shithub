@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     GridItem,
@@ -13,7 +13,7 @@ import {
     IconButton,
 } from "@chakra-ui/react";
 import { useAuth, useAuthDispatch } from "../context/authContext";
-import { IconEdit, IconCancel, IconCheck } from "@tabler/icons-react";
+import { IconEdit, IconCancel, IconCheck, IconBell, IconBellCheck, IconBellX } from "@tabler/icons-react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
 
@@ -22,7 +22,20 @@ export const UserInfoPage = () => {
     const authDispatch = useAuthDispatch();
     const toast = useToast();
     const [isEditing, setIsEditing] = useState(false);
-    const [newDisplayname, setNewDisplayname] = useState(auth.user.displayName);
+    const [newDisplayname, setNewDisplayname] = useState(auth.user.displayName || "");
+    const [webpushRegistered, setWebpushRegistered] = useState(false);
+
+    useEffect(() => {
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+            setWebpushRegistered(false);
+            return;
+        }
+
+        navigator.serviceWorker.ready.then(async (registration) => {
+            const sub = await registration.pushManager.getSubscription();
+            setWebpushRegistered(!!sub);
+        });
+    });
 
     const handleSave = () => {
         authFetch(`${BACKEND_URL}/user/displayname`, "PATCH", { displayName: newDisplayname }).then((response) => {
@@ -45,10 +58,81 @@ export const UserInfoPage = () => {
                 });
             }
         });
-
-
         setIsEditing(false);
     };
+
+    const handleRegisterWebpush = async () => {
+        console.log("Registering webpush");
+        if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+            console.log("Webpush not supported");
+            return toast({
+                title: "唔好意思👷😢",
+                description: "你的瀏覽器唔支援推送通知",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            });
+        }
+        console.log("Webpush supported");
+
+        const registration = await navigator.serviceWorker.ready;
+
+        const sub = await registration.pushManager.getSubscription();
+
+        if (sub) {
+            console.log("Already subscribed");
+            // Already subscribed
+            // Unsubscribe
+            await sub.unsubscribe();
+            await authFetch(`${BACKEND_URL}/webpush/unregister`, "POST", { endpoint: sub.endpoint });
+            setWebpushRegistered(false);
+            return toast({
+                title: "成功",
+                description: "已取消推送通知",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            });
+        }
+
+        console.log("Subscribing");
+        const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(publicKey),
+        });
+
+        authFetch(`${BACKEND_URL}/webpush/register`, "POST", { subscription: subscription.toJSON() }).then((response) => {
+            if (response.success) {
+                setWebpushRegistered(true);
+                toast({
+                    title: "成功",
+                    description: "已訂閱推送通知",
+                    status: "success",
+                    duration: 2000,
+                    isClosable: true,
+                });
+            } else {
+                toast({
+                    title: "唔好意思👷😢",
+                    description: "訂閱推送通知失敗",
+                    status: "error",
+                    duration: 2000,
+                    isClosable: true,
+                });
+            }
+        }).catch((err) => {
+            console.error("Error registering webpush:", err);
+            toast({
+                title: "唔好意思👷😢",
+                description: "訂閱推送通知失敗",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            });
+        });
+
+    }
 
     const userIDToIDNo = (userID: string) => {
         const split = userID.split("-");
@@ -78,7 +162,7 @@ export const UserInfoPage = () => {
                     <Avatar
                         size="xl"
                         name={auth.user.userName}
-                        src="/poop.svg"
+                        src="/poop-small.png"
                         border="4px solid"
                         borderColor="brown.500"
                     />
@@ -157,18 +241,44 @@ export const UserInfoPage = () => {
                         </Text>
                     </Box>
                 </VStack>
-                <Box
-                    fontSize="sm"
-                    color="gray.500"
-                    fontStyle="italic"
-                    textAlign="right"
-                    p={2}
-                >
-                    Member since {new Date(auth.user.createdAt).getFullYear()}  {new Date(auth.user.createdAt).toLocaleString('en-US', { month: 'long' })}
-                    <br />
-                    The holder of this ID has the right to poop
-                </Box>
+                <Flex justifyContent={"space-between"}>
+                    <IconButton
+                        aria-label="Register Webpush"
+                        icon={webpushRegistered ? <IconBellCheck /> : <IconBellX />}
+                        onClick={handleRegisterWebpush}
+                        size="md"
+                        m="2"
+                        variant="ghost"
+                        colorScheme="brown"
+                    />
+                    <Box
+                        fontSize="sm"
+                        color="gray.500"
+                        fontStyle="italic"
+                        textAlign="right"
+                        p={2}
+                    >
+                        Member since {new Date(auth.user.createdAt).getFullYear()}  {new Date(auth.user.createdAt).toLocaleString('en-US', { month: 'long' })}
+                        <br />
+                        The holder of this ID has the right to poop
+                    </Box>
+                </Flex>
             </Box>
         </GridItem>
     );
 };
+
+function urlBase64ToUint8Array(base64String: string) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+
+    const rawData = window.atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i)
+    }
+    return outputArray
+}
