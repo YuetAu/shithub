@@ -34,7 +34,7 @@ self.addEventListener("push", function (event) {
             body: data.body || "Checking in on you!",
             icon: data.icon || "/poop.png",
             badge: data.badge || "/poop-small.png",
-            vibrate: data.vibrate || [100, 50, 100],
+            vibrate: data.silent ? undefined : data.vibrate || [100, 50, 100],
             tag: data.tag || "default",
             silent: data.silent || false,
             data: {
