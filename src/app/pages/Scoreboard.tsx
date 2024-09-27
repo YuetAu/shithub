@@ -21,6 +21,7 @@ export const ScoreboardPage = () => {
                 setIsLoading(true);
                 const res = await authFetch(`${BACKEND_URL}/shit/scoreboard`, "GET");
                 console.log("Successfully fetched scoreboard");
+                if (!res.success || !res.scoreboard) throw new Error("Unable to Load")
                 setScores(res.scoreboard);
                 setError(null);
             } catch (err) {
