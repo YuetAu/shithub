@@ -140,7 +140,7 @@ export const ShitCounter = (props: any) => {
                         zIndex="50"
                         width={150}
                     >
-                        <Image height={"100%"} alt={"A pile of poop"} src={"poop.png"} />
+                        <Image alt={"A pile of poop"} src={"poop.png"} />
                     </Box>
                 </Flex>
             </GridItem>
