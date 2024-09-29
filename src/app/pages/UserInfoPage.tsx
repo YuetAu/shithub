@@ -252,7 +252,7 @@ export const UserInfoPage = () => {
                         colorScheme="brown"
                     />
                     <Box
-                        fontSize="sm"
+                        fontSize="xs"
                         color="gray.500"
                         fontStyle="italic"
                         textAlign="right"

@@ -75,20 +75,24 @@ export const UserLoginPage: React.FC = () => {
         try {
             if (state.allowRegister) {
                 const res = await UserRegister(state.username);
-                if (!res) throw new Error('Registration failed');
+                if (!res) throw new Error('SFRG');
             } else {
                 const challenge = await GetLoginChallenge();
+                if (!challenge) throw new Error('SFLC');
                 const authResp = await startAuthentication(challenge.options);
+                if (!authResp) throw new Error('CFSA');
                 const res = await UserLogin(challenge.token, authResp);
-                if (!res) throw new Error('Login failed')
+                if (!res) throw new Error('SFLG');
             }
             const userData = await GetUserInfo();
-            if (!userData) throw new Error('Unable to fetching from server')
+            if (!userData) throw new Error('SFGU');
             authDispatch({ type: 'LOGIN', payload: userData.user });
             tabSet(2);
         } catch (error) {
             console.error('Auth error:', error);
-            updateState({ errorText: 'Authentication failed. Please try again.', isInvalid: true, isLoggingIn: false });
+            updateState({
+                errorText: `Authentication failed. Please try again. ${error}`, isInvalid: true, isLoggingIn: false
+            });
         } finally {
             updateState({ isProcessing: false });
         }
