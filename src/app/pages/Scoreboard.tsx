@@ -131,6 +131,11 @@ export const ScoreboardPage = () => {
                                 </Flex>
                             </Flex>
                         ))}
+                        {sortedScores.length === 0 && (
+                            <Text textAlign="center" color="gray.700" fontSize="lg" my="auto">
+                                啱啱沖完廁🚽 仲未有屎住
+                            </Text>
+                        )}
                     </Box>
                 </VStack>
             </Flex>
