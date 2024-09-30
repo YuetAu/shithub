@@ -11,6 +11,7 @@ import {
     Avatar,
     Flex,
     IconButton,
+    Link,
 } from "@chakra-ui/react";
 import { useAuth, useAuthDispatch } from "../context/authContext";
 import { IconEdit, IconCancel, IconCheck, IconBell, IconBellCheck, IconBellX } from "@tabler/icons-react";
@@ -241,15 +242,16 @@ export const UserInfoPage = () => {
                         </Text>
                     </Box>
                 </VStack>
-                <Flex justifyContent={"space-between"}>
+                <Flex justifyContent={"space-between"} alignContent={"center"}>
                     <IconButton
                         aria-label="Register Webpush"
                         icon={webpushRegistered ? <IconBellCheck /> : <IconBellX />}
                         onClick={handleRegisterWebpush}
                         size="md"
-                        m="2"
+                        mx="2"
                         variant="ghost"
                         colorScheme="brown"
+                        my="auto"
                     />
                     <Box
                         fontSize="xs"
@@ -261,6 +263,8 @@ export const UserInfoPage = () => {
                         Member since {new Date(auth.user.createdAt).getFullYear()}  {new Date(auth.user.createdAt).toLocaleString('en-US', { month: 'long' })}
                         <br />
                         The holder of this ID has the right to poop
+                        <br />
+                        <Link isExternal href="https://forms.office.com/r/dc9hhvSYdH" target="_blank" color="red">Report Problem Here</Link>
                     </Box>
                 </Flex>
             </Box>

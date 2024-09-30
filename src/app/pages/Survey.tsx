@@ -1,9 +1,10 @@
-import { VStack, Text, Box, Button, Checkbox, HStack, useTab, useToast } from "@chakra-ui/react"
-import { IconDatabase, IconPooFilled, IconShieldLock, IconUserCircle } from "@tabler/icons-react"
-import { useEffect, useState } from "react"
-import { BristolStoolChartSlider } from "../props/ScaleSelector"
-import { authFetch } from "../helper/authFetch"
+import { Box, Button, Flex, IconButton, Input, Text, useToast, VStack } from "@chakra-ui/react"
+import { IconCancel, IconCheck, IconEdit, IconPooFilled } from "@tabler/icons-react"
+import { use, useEffect, useRef, useState } from "react"
 import { BACKEND_URL } from "../common/const"
+import { authFetch } from "../helper/authFetch"
+import { BristolStoolChartSlider } from "../props/ScaleSelector"
+import React from "react"
 
 
 export const Survey = (props: any) => {
@@ -11,7 +12,6 @@ export const Survey = (props: any) => {
     const [page, setPage] = useState(0)
 
     useEffect(() => {
-        console.log(props.lastShitTime, page, props.lastShitTime === "")
         if (props.lastShitTime === "") {
             setPage(1)
         } else if (props.lastShitTime !== "") {
@@ -24,12 +24,12 @@ export const Survey = (props: any) => {
         setPage(targetPage);
     }
 
-    const handleUpdateShit = (data: any) => authFetch(`${BACKEND_URL}/shit`, "PATCH", { shitID: props.newShitIDRef.current, data: { extraData: JSON.stringify(data) } })
+    const handleUpdateShit = (data: any) => authFetch(`${BACKEND_URL}/shit`, "PATCH", { shitID: props.newShitIDRef.current, data: { extraData: data } })
 
     return (
         <>
             {page === 0 && (
-                <ShitTimeStat lastShitTime={props.lastShitTime} lastRandomShitTime={props.lastRandomShitTime} switchPage={switchPage} />
+                <ShitTimeStat isOpen={props.isOpen} shitID={props.newShitIDRef} lastShitTime={props.lastShitTime} lastRandomShitTime={props.lastRandomShitTime} lastRandomMessage={props.lastRandomMessage} switchPage={switchPage} handleUpdateShit={handleUpdateShit} />
             )}
             {page === 1 && (
                 <ShitInviteSurvey switchPage={switchPage} />
@@ -42,6 +42,44 @@ export const Survey = (props: any) => {
 }
 
 export const ShitTimeStat = (props: any) => {
+
+    const toast = useToast()
+
+    const [isEditing, setIsEditing] = useState(false)
+    const [newMessage, setNewMessage] = useState("")
+
+    const lastShitID = useRef(props.shitID.current)
+
+    useEffect(() => {
+        if (lastShitID.current !== props.shitID.current) {
+            setNewMessage("")
+            setIsEditing(false)
+            lastShitID.current = props.shitID.current
+        }
+    }, [props.isOpen])
+
+    const handleSubmit = (value: any) => {
+        props.handleUpdateShit({ message: newMessage.trim() }).then(() => {
+            toast({
+                title: "成功",
+                description: "你嘅口訊已經提交！",
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+            })
+            setIsEditing(false)
+        }).catch((err: any) => {
+            console.error(err)
+            toast({
+                title: "唔好意思👷😢",
+                description: "提交唔到口訊",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            })
+        })
+    };
+
     return (
         <>
             <VStack
@@ -84,13 +122,83 @@ export const ShitTimeStat = (props: any) => {
                     要記得多飲水啊！
                 </Text>
 
-                <Text
-                    color="yellow.500"
-                    fontSize="md"
-                    fontStyle="italic"
+                <Box
+                    bg="whiteAlpha.200"
+                    borderRadius="lg"
+                    p={4}
+                    mt={4}
+                    flex={"1"}
+                    justifyContent={"center"}
+                    alignContent={"center"}
+                    textAlign={"center"}
+                    lineHeight={1.5}
                 >
-                    有人喺{props.lastRandomShitTime}前屙完屎嚟
-                </Text>
+                    <Text
+                        color="white"
+                        fontSize="sm"
+                        textAlign="center"
+                    >
+                        {props.lastRandomMessage ? `上一手喺 ${props.lastRandomShitTime}前屙完屎嚟想同你講:` : `上一手喺 ${props.lastRandomShitTime}前屙完屎嚟`}
+                    </Text>
+                    {props.lastRandomMessage &&
+                        <Text
+                            color="white"
+                            fontSize="lg"
+                            textAlign="center"
+                        >
+                            {props.lastRandomMessage}
+                        </Text>
+                    }
+                    <Text
+                        mt="0.75rem"
+                        color="white"
+                        fontSize="sm"
+                        textAlign="center"
+                    >
+                        寫返啲嘢俾下一手？
+                    </Text>
+                    {isEditing ? (
+                        <Flex>
+                            <Input
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Enter new username"
+                                size="sm"
+                                borderColor="brown.300"
+                            />
+                            <IconButton
+                                aria-label="Save username"
+                                icon={<IconCheck />}
+                                onClick={handleSubmit}
+                                ml={2}
+                                size="sm"
+                                colorScheme="green"
+                            />
+                            <IconButton
+                                aria-label="Cancel editing"
+                                icon={<IconCancel />}
+                                onClick={() => setIsEditing(false)}
+                                ml={2}
+                                size="sm"
+                                colorScheme="red"
+                            />
+                        </Flex>
+                    ) : (
+                        <Flex alignItems="center" justifyContent="center">
+                            {newMessage && <Text fontSize="lg" color="white" mr={1}>
+                                {newMessage}
+                            </Text>}
+                            <IconButton
+                                aria-label="Leave your message"
+                                icon={<IconEdit color="white" stroke={1.25} />}
+                                onClick={() => setIsEditing(true)}
+                                size="xs"
+                                variant="ghost"
+                                colorScheme="brown"
+                            />
+                        </Flex>
+                    )}
+                </Box>
 
                 <Box
                     bg="whiteAlpha.200"
@@ -204,7 +312,6 @@ export const ShitSurvey = (props: any) => {
                 isClosable: true,
             })
             props.switchPage(0)
-            props.setOpen(false)
         }).catch((err: any) => {
             console.error(err)
             toast({

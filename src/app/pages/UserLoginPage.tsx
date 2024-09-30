@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Box, Flex, GridItem, Input, Spinner, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, GridItem, Input, Spinner, Text } from '@chakra-ui/react';
 import { startAuthentication, platformAuthenticatorIsAvailable } from '@simplewebauthn/browser';
 import { IconKeyFilled } from '@tabler/icons-react';
 import { debounce } from 'lodash';
@@ -195,6 +195,15 @@ export const UserLoginPage: React.FC = () => {
                     </>
                 )}
             </Box>
+
+            {state.errorText && <Button
+                as="a"
+                href="https://forms.office.com/r/dc9hhvSYdH"
+                target="_blank"
+                colorScheme="red"
+            >
+                Report Error
+            </Button>}
         </Box>
     );
 

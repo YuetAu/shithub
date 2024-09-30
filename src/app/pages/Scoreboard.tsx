@@ -111,9 +111,6 @@ export const ScoreboardPage = () => {
                                         <Text fontSize="xl" fontWeight="bold" color="brown.800" noOfLines={1} textAlign={"start"}>
                                             {score.displayName || score.userName}
                                         </Text>
-                                        {/* <Text fontSize="sm" color="gray.600">
-                                            @{score.userName}
-                                        </Text> */}
                                     </VStack>
                                 </Flex>
                                 <Flex align="center" justify="flex-end" ml={2}>

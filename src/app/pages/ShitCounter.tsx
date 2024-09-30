@@ -19,6 +19,7 @@ export const ShitCounter = (props: any) => {
     const [popBoxOpened, setPopBoxOpened] = useState(false);
     const [lastShitTime, setLastShitTime] = useState("");
     const [lastRandomShitTime, setLastRandomShitTime] = useState("");
+    const [lastRandomMessage, setLastRandomMessage] = useState(null);
     const newShitIDRef = React.useRef<string>("");
 
     const handleCounter = () => {
@@ -65,9 +66,9 @@ export const ShitCounter = (props: any) => {
                     const timeDiff = Date.now() - response.lastRandomShit;
                     let hh = Math.floor(timeDiff / 1000 / 60 / 60);
                     let mm = Math.ceil(timeDiff / 1000 / 60);
-                    console.log(timeDiff, hh, mm)
                     setLastRandomShitTime(hh > 0 ? `${hh} 鐘頭` : `${mm} 分鐘`);
                 }
+                setLastRandomMessage(response.lastRandomMessage);
                 setPopBoxOpened(true);
             } else {
                 setCounter(newCounter - 1);
@@ -145,7 +146,7 @@ export const ShitCounter = (props: any) => {
                 </Flex>
             </GridItem>
             <PopBox isOpen={popBoxOpened} onClose={() => setPopBoxOpened(false)}>
-                <Survey isOpen={popBoxOpened} setOpen={setPopBoxOpened} lastShitTime={lastShitTime} lastRandomShitTime={lastRandomShitTime} newShitIDRef={newShitIDRef} />
+                <Survey isOpen={popBoxOpened} setOpen={setPopBoxOpened} lastShitTime={lastShitTime} lastRandomShitTime={lastRandomShitTime} lastRandomMessage={lastRandomMessage} newShitIDRef={newShitIDRef} />
             </PopBox>
         </>
     )
