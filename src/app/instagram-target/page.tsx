@@ -10,8 +10,8 @@ import {
 
 const InstagramBrowserDetector = () => {
 
-    const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
-    const color = useColorModeValue('white', 'black');
+    //const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
+    //const color = useColorModeValue('white', 'black');
 
     /* if (!isInstagramBrowser) {
         return null;
@@ -24,7 +24,7 @@ const InstagramBrowserDetector = () => {
             left="0"
             right="0"
             bottom="0"
-            bg={bg}
+            bg={'rgba(0, 0, 0, 0.8)'}
             zIndex="overlay"
         >
             <Grid
@@ -35,17 +35,17 @@ const InstagramBrowserDetector = () => {
             >
                 <GridItem rowSpan={2}>
                     <Flex h="100%" justifyContent="center" alignItems="center" textAlign="center">
-                        <Text color={color} fontSize="50" fontWeight="700" zIndex="99">
+                        <Text color={'black'} fontSize="50" fontWeight="700" zIndex="99">
                             請使用外置瀏覽器開啟
                         </Text>
                     </Flex>
                 </GridItem>
                 <GridItem>
                     <Flex h="100%" justifyContent="center" alignItems="center" textAlign="center">
-                        <Text color={color} fontSize="100" fontWeight="1000" zIndex="99">
+                        <Text color={'white'} fontSize="100" fontWeight="1000" zIndex="99">
                             💩
                         </Text>
-                        <Text color={color} fontSize="50" fontWeight="100" zIndex="99">
+                        <Text color={'white'} fontSize="50" fontWeight="100" zIndex="99">
                             ShitHub
                         </Text>
                     </Flex>
