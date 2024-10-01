@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Box } from "@chakra-ui/react";
-import { holdFloat, flyAcross } from "../styles/keyframes";
+//import { holdFloat, flyAcross } from "../styles/keyframes";
 
 interface ShitBackgroundProps {
     containerHeight?: number;

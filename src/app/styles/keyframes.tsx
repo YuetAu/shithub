@@ -1,4 +1,4 @@
-import { keyframes } from "@chakra-ui/react";
+/* import { keyframes } from "@chakra-ui/react";
 
 export const flyAcross = keyframes`
   0% {
@@ -14,4 +14,4 @@ export const flyAcross = keyframes`
 export const holdFloat = keyframes`
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-20px); }
-`;
+`; */
