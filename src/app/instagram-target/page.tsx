@@ -1,27 +1,14 @@
 "use client"
-import React, { useEffect, useState } from 'react';
 import {
     Box,
     Flex,
-    Text,
-    Image,
-    VStack,
-    GridItem,
     Grid,
-    useColorModeValue,
+    GridItem,
+    Text,
+    useColorModeValue
 } from '@chakra-ui/react';
 
 const InstagramBrowserDetector = () => {
-    const [isInstagramBrowser, setIsInstagramBrowser] = useState(false);
-
-    useEffect(() => {
-        const checkBrowser = () => {
-            const userAgent = navigator.userAgent;
-            return userAgent.indexOf('Instagram') > -1;
-        };
-
-        setIsInstagramBrowser(checkBrowser());
-    }, []);
 
     const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
     const color = useColorModeValue('white', 'black');
