@@ -17,6 +17,7 @@ import { useAuth, useAuthDispatch } from "../context/authContext";
 import { IconEdit, IconCancel, IconCheck, IconBell, IconBellCheck, IconBellX } from "@tabler/icons-react";
 import { authFetch } from "../helper/authFetch";
 import { BACKEND_URL } from "../common/const";
+import { set } from "lodash";
 
 export const UserInfoPage = () => {
     const auth = useAuth();
@@ -39,6 +40,22 @@ export const UserInfoPage = () => {
     });
 
     const handleSave = () => {
+        if (newDisplayname === auth.user.displayName) {
+            setIsEditing(false);
+            return;
+        }
+        if (newDisplayname.length > 20) {
+            toast({
+                title: "唔好意思👷😢",
+                description: "名稱太長",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+            });
+            return;
+        }
+
+
         authFetch(`${BACKEND_URL}/user/displayname`, "PATCH", { displayName: newDisplayname }).then((response) => {
             if (response.success) {
                 authDispatch({ type: "LOGIN", payload: { ...auth.user, displayName: newDisplayname } });
