@@ -10,8 +10,8 @@ import {
 
 const InstagramBrowserDetector = () => {
 
-    //const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
-    //const color = useColorModeValue('white', 'black');
+    const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
+    const color = useColorModeValue('white', 'black');
 
     /* if (!isInstagramBrowser) {
         return null;
@@ -35,7 +35,7 @@ const InstagramBrowserDetector = () => {
             >
                 <GridItem rowSpan={2}>
                     <Flex h="100%" justifyContent="center" alignItems="center" textAlign="center">
-                        <Text color={'black'} fontSize="50" fontWeight="700" zIndex="99">
+                        <Text color={'white'} fontSize="50" fontWeight="700" zIndex="99">
                             請使用外置瀏覽器開啟
                         </Text>
                     </Flex>
