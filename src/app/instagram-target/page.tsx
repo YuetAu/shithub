@@ -10,12 +10,13 @@ import {
 
 const InstagramBrowserDetector = () => {
 
-    const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
-    const color = useColorModeValue('white', 'black');
+    //const bg = useColorModeValue('rgba(0,0,0,0.8)', 'rgba(255,255,255,0.8)');
+    //const color = useColorModeValue('white', 'black');
 
-    /* if (!isInstagramBrowser) {
-        return null;
-    } */
+    if (!navigator.userAgent.includes('Instagram')) {
+        window.location.href = 'https://shithub.xyz/';
+        return;
+    }
 
     return (
         <Box

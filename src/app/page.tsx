@@ -29,6 +29,7 @@ const Home: React.FC = () => {
 
     if (navigator.userAgent.includes('Instagram')) {
       window.location.href = 'https://shithub.xyz/instagram-target';
+      return;
     }
 
     const storedAuth = localStorage.getItem('auth');
