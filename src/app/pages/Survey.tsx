@@ -162,12 +162,13 @@ export const ShitTimeStat = (props: any) => {
                             <Input
                                 value={newMessage}
                                 onChange={(e) => setNewMessage(e.target.value)}
-                                placeholder="Enter new username"
+                                placeholder="Leave your message"
                                 size="sm"
                                 borderColor="brown.300"
+                                maxLength={30}
                             />
                             <IconButton
-                                aria-label="Save username"
+                                aria-label="Save comments"
                                 icon={<IconCheck />}
                                 onClick={handleSubmit}
                                 ml={2}
